@@ -3,58 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Assistant Personnel 🌟</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mon Assistant 🌟 - Dashboard</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
     <link rel="manifest" href="manifest.json">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Particules animées -->
-    <div class="particles" id="particles"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>Mon Assistant</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
+            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
+            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
+            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+        </div>
+        <div class="nav-theme">
+            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+        </div>
+    </nav>
 
-    <div class="container">
-        <header>
-            <h1>🌟 Mon Assistant Personnel</h1>
-            <div class="subtitle">Ton compagnon intelligent pour organiser ta vie</div>
-        </header>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="welcome-message">
+            <h1>Bonjour, <span id="userName">Étudiant</span> ! 👋</h1>
+            <p id="timeGreeting"></p>
+        </div>
+        <div class="weather-widget" id="weatherWidget">
+            <i class="fas fa-sun"></i>
+            <span>Chargement météo...</span>
+        </div>
+    </header>
 
-        <div class="dashboard">
-            <!-- Widget Tâches -->
-            <div class="widget">
-                <h2>📝 Mes Tâches</h2>
-                <div class="input-group">
-                    <input type="text" id="newTask" placeholder="Quelle est ta prochaine tâche ?">
-                    <button onclick="addTask()">Ajouter</button>
+    <!-- Statistiques Rapides -->
+    <section class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="totalTasks">0</h3>
+                <p>Tâches totales</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="completedTasks">0</h3>
+                <p>Tâches terminées</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-sticky-note"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="totalNotes">0</h3>
+                <p>Notes créées</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="activeGoals">0</h3>
+                <p>Objectifs actifs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenu Principal -->
+    <main class="dashboard-main">
+        <div class="dashboard-grid">
+            <!-- Tâches Récentes -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-clock"></i> Tâches Récentes</h2>
+                    <a href="tasks.html" class="view-all">Voir tout</a>
                 </div>
-                <div class="task-list" id="taskList"></div>
+                <div class="widget-content">
+                    <div id="recentTasks" class="task-list"></div>
+                </div>
             </div>
 
-            <!-- Widget Notes -->
-            <div class="widget">
-                <h2>📓 Notes Perso</h2>
-                <input type="text" id="noteTitle" placeholder="Titre de la note">
-                <textarea id="noteContent" placeholder="Écris tes pensées, idées, rappels..."></textarea>
-                <button onclick="addNote()">Sauvegarder la Note</button>
-                <div class="notes-list" id="notesList"></div>
+            <!-- Notes Récentes -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-sticky-note"></i> Notes Récentes</h2>
+                    <a href="notes.html" class="view-all">Voir tout</a>
+                </div>
+                <div class="widget-content">
+                    <div id="recentNotes" class="notes-list"></div>
+                </div>
+            </div>
+
+            <!-- Calendrier du jour -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-calendar-day"></i> Aujourd'hui</h2>
+                    <span id="todayDate"></span>
+                </div>
+                <div class="widget-content">
+                    <div id="todayEvents" class="events-list"></div>
+                </div>
+            </div>
+
+            <!-- Progression des objectifs -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-chart-line"></i> Progression</h2>
+                </div>
+                <div class="widget-content">
+                    <div class="progress-chart" id="goalsProgress">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assistant IA -->
+            <div class="dashboard-widget full-width">
+                <div class="widget-header">
+                    <h2><i class="fas fa-robot"></i> Assistant IA</h2>
+                </div>
+                <div class="widget-content">
+                    <div class="ai-assistant">
+                        <div class="ai-messages" id="aiMessages"></div>
+                        <div class="ai-input">
+                            <input type="text" id="aiInput" placeholder="Pose une question à ton assistant...">
+                            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
 
-        <!-- Statistiques -->
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalTasks">0</div>
-                <div class="stat-label">Tâches totales</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="completedTasks">0</div>
-                <div class="stat-label">Tâches terminées</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalNotes">0</div>
-                <div class="stat-label">Notes sauvegardées</div>
-            </div>
-        </div>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Mon Assistant Personnel. Développé avec ❤️ pour les étudiants.</p>
+    </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/charts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
