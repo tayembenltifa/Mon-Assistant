@@ -1,58 +1,69 @@
-/* Styles spécifiques au dashboard et aux tâches */
+/* 🌟 STYLES SPÉCIFIQUES AU DASHBOARD 🌟 */
 
-/* Page Header */
+/* Page Header moderne */
 .page-header {
-    padding: 2rem;
-    color: white;
+    padding: 3rem 2rem 2rem;
     text-align: center;
+    color: white;
+    position: relative;
 }
 
 .page-header h1 {
     font-size: 2.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .page-header p {
     font-size: 1.2rem;
     opacity: 0.9;
+    font-weight: 300;
 }
 
-/* Container principal des tâches */
-.tasks-container {
+/* Containers principaux */
+.tasks-container,
+.notes-container,
+.calendar-container,
+.goals-container,
+.profile-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
 }
 
-/* Carte de formulaire */
-.task-form-card {
+/* Cartes de formulaire */
+.task-form-card,
+.goal-form-card {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    backdrop-filter: blur(20px);
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: 2rem;
 }
 
-[data-theme="dark"] .task-form-card {
-    background: rgba(45, 55, 72, 0.95);
+[data-theme="dark"] .task-form-card,
+[data-theme="dark"] .goal-form-card {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-.task-form-card h3 {
-    margin-bottom: 1.5rem;
-    color: var(--primary-color);
+.task-form-card h3,
+.goal-form-card h3 {
+    margin-bottom: 2rem;
+    color: var(--dark);
+    font-size: 1.5rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
-/* Formulaires */
+/* Formulaires modernes */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -61,69 +72,76 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--dark);
+    font-size: 0.95rem;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e2e8f0;
-    border-radius: var(--border-radius);
-    background: var(--light-color);
-    color: var(--text-dark);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: var(--lighter);
+    color: var(--dark);
+    font-size: 1rem;
     transition: var(--transition);
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea,
+[data-theme="dark"] .form-group select {
+    background: var(--light);
+    border-color: var(--gray-light);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-2px);
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-/* Boutons */
+/* Boutons modernes */
 .btn-primary {
-    background: var(--primary-color);
+    background: var(--gradient-primary);
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
     cursor: pointer;
     font-weight: 600;
+    font-size: 1rem;
     transition: var(--transition);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
 }
 
 .btn-secondary {
-    background: var(--light-color);
-    color: var(--text-dark);
-    border: 2px solid #e2e8f0;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
     cursor: pointer;
     font-weight: 600;
+    font-size: 1rem;
     transition: var(--transition);
     display: flex;
     align-items: center;
@@ -131,38 +149,209 @@
 }
 
 .btn-secondary:hover {
-    background: #e2e8f0;
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
 }
 
 .btn-danger {
-    background: var(--danger-color);
+    background: var(--gradient-secondary);
     color: white;
-}
-
-.btn-danger:hover {
-    background: #c53030;
-}
-
-.btn-icon {
-    background: none;
     border: none;
-    padding: 0.5rem;
-    border-radius: 6px;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
     cursor: pointer;
-    color: var(--text-light);
+    font-weight: 600;
     transition: var(--transition);
 }
 
-.btn-icon:hover {
-    background: var(--light-color);
-    color: var(--text-dark);
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-/* Contrôles des tâches */
-.tasks-controls {
+.btn-icon {
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--gray);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Cartes de tâches et objectifs */
+.task-card,
+.goal-card {
+    background: var(--lighter);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+    margin-bottom: 1rem;
+    animation: slideIn 0.5s ease;
+}
+
+[data-theme="dark"] .task-card,
+[data-theme="dark"] .goal-card {
+    background: var(--light);
+}
+
+.task-card:hover,
+.goal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.task-card.completed,
+.goal-card.completed {
+    opacity: 0.7;
+    border-left-color: var(--success);
+}
+
+.task-card.overdue,
+.goal-card.overdue {
+    border-left-color: var(--danger);
+}
+
+/* En-têtes des cartes */
+.task-header,
+.goal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.task-checkbox,
+.goal-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--primary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.task-checkbox:hover,
+.goal-checkbox:hover {
+    background: var(--primary);
+    transform: scale(1.1);
+}
+
+.task-checkbox.checked,
+.goal-checkbox.checked {
+    background: var(--primary);
+    color: white;
+}
+
+.task-title,
+.goal-title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--dark);
+}
+
+.task-actions,
+.goal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Métadonnées */
+.task-meta,
+.goal-meta {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.task-category,
+.task-priority,
+.task-due-date,
+.goal-category,
+.goal-priority,
+.goal-date {
+    display: flex;
     align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--light);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+[data-theme="dark"] .task-category,
+[data-theme="dark"] .task-priority,
+[data-theme="dark"] .task-due-date,
+[data-theme="dark"] .goal-category,
+[data-theme="dark"] .goal-priority,
+[data-theme="dark"] .goal-date {
+    background: var(--lighter);
+}
+
+.task-due-date.overdue,
+.goal-date.overdue {
+    background: var(--danger);
+    color: white;
+}
+
+/* Barres de progression */
+.task-progress,
+.goal-progress {
+    margin-top: 1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--gray-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+    text-align: right;
+    display: block;
+}
+
+/* Contrôles de recherche et filtres */
+.tasks-controls,
+.notes-controls,
+.goals-controls {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
@@ -174,19 +363,32 @@
 
 .search-box i {
     position: absolute;
-    left: 1rem;
+    left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-light);
+    color: var(--gray);
+    z-index: 1;
 }
 
 .search-box input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 3rem;
-    border: 2px solid #e2e8f0;
-    border-radius: var(--border-radius);
-    background: var(--light-color);
-    color: var(--text-dark);
+    padding: 1rem 1.25rem 1rem 3rem;
+    border: 2px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: var(--lighter);
+    color: var(--dark);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+[data-theme="dark"] .search-box input {
+    background: var(--light);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .filters {
@@ -196,192 +398,26 @@
 }
 
 .filters select {
-    padding: 0.75rem;
-    border: 2px solid #e2e8f0;
-    border-radius: var(--border-radius);
-    background: var(--light-color);
-    color: var(--text-dark);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--gray-light);
+    border-radius: var(--radius);
+    background: var(--lighter);
+    color: var(--dark);
+    font-size: 1rem;
     min-width: 150px;
-}
-
-/* Statistiques des tâches */
-.tasks-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.stat-item {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    text-align: center;
-    box-shadow: var(--shadow);
-}
-
-[data-theme="dark"] .stat-item {
-    background: rgba(45, 55, 72, 0.95);
-}
-
-.stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: var(--bg-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
-}
-
-.stat-label {
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
-/* Cartes de tâches */
-.task-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    margin-bottom: 1rem;
-    border-left: 4px solid var(--primary-color);
     transition: var(--transition);
 }
 
-[data-theme="dark"] .task-card {
-    background: rgba(45, 55, 72, 0.95);
+[data-theme="dark"] .filters select {
+    background: var(--light);
 }
 
-.task-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+.filters select:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
-.task-card.completed {
-    opacity: 0.7;
-    border-left-color: var(--success-color);
-}
-
-.task-card.priority-urgent {
-    border-left-color: var(--danger-color);
-}
-
-.task-card.priority-high {
-    border-left-color: #e53e3e;
-}
-
-.task-card.priority-medium {
-    border-left-color: var(--warning-color);
-}
-
-.task-card.priority-low {
-    border-left-color: var(--success-color);
-}
-
-.task-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.task-checkbox {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    flex-shrink: 0;
-}
-
-.task-checkbox:hover {
-    background: var(--primary-color);
-    color: white;
-}
-
-.task-checkbox.checked {
-    background: var(--primary-color);
-    color: white;
-}
-
-.task-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.task-card.completed .task-title {
-    text-decoration: line-through;
-}
-
-.task-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.task-description {
-    color: var(--text-light);
-    margin-bottom: 1rem;
-    line-height: 1.5;
-}
-
-.task-meta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-}
-
-.task-category,
-.task-priority,
-.task-due-date {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    background: var(--light-color);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-[data-theme="dark"] .task-category,
-[data-theme="dark"] .task-priority,
-[data-theme="dark"] .task-due-date {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.task-due-date.overdue {
-    background: var(--danger-color);
-    color: white;
-}
-
-.task-progress {
-    margin-top: 1rem;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 6px;
-    background: var(--light-color);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: var(--success-color);
-    transition: width 0.3s ease;
-}
-
-/* Vue Kanban */
+/* Vues Kanban */
 .kanban-view {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -392,22 +428,21 @@
 .kanban-column {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
     padding: 1.5rem;
     min-height: 500px;
 }
 
 [data-theme="dark"] .kanban-column {
-    background: rgba(45, 55, 72, 0.8);
+    background: rgba(30, 41, 59, 0.8);
 }
 
 .kanban-column h4 {
     margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--gray-light);
+    color: var(--dark);
+    font-weight: 600;
 }
 
 .kanban-tasks {
@@ -418,66 +453,38 @@
 }
 
 .kanban-task {
-    background: white;
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: var(--lighter);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
     cursor: move;
     transition: var(--transition);
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--primary);
 }
 
 [data-theme="dark"] .kanban-task {
-    background: var(--dark-color);
+    background: var(--light);
 }
 
 .kanban-task:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
 
 .kanban-task.urgent {
-    border-left-color: var(--danger-color);
+    border-left-color: var(--danger);
 }
 
 .kanban-task.high {
-    border-left-color: #e53e3e;
+    border-left-color: var(--warning);
 }
 
 .kanban-task.medium {
-    border-left-color: var(--warning-color);
+    border-left-color: var(--primary);
 }
 
 .kanban-task.low {
-    border-left-color: var(--success-color);
-}
-
-.kanban-task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.task-priority-badge {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.task-priority-badge.urgent { background: var(--danger-color); }
-.task-priority-badge.high { background: #e53e3e; }
-.task-priority-badge.medium { background: var(--warning-color); }
-.task-priority-badge.low { background: var(--success-color); }
-
-.kanban-task-title {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.kanban-task-due {
-    font-size: 0.8rem;
-    color: var(--text-light);
+    border-left-color: var(--success);
 }
 
 /* Contrôles de vue */
@@ -485,15 +492,16 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
+    margin-top: 2rem;
     flex-wrap: wrap;
 }
 
 .view-btn {
-    background: var(--light-color);
-    color: var(--text-dark);
-    border: 2px solid #e2e8f0;
+    background: var(--light);
+    color: var(--dark);
+    border: 2px solid var(--gray-light);
     padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
     cursor: pointer;
     font-weight: 600;
     transition: var(--transition);
@@ -503,44 +511,44 @@
 }
 
 .view-btn.active {
-    background: var(--primary-color);
+    background: var(--primary);
     color: white;
-    border-color: var(--primary-color);
+    border-color: var(--primary);
 }
 
 .view-btn:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-/* État vide */
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-light);
-}
-
-.empty-state i {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.empty-state h3 {
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .tasks-container {
-        padding: 0 1rem 1rem;
+/* Responsive pour le dashboard */
+@media (max-width: 1024px) {
+    .kanban-view {
+        grid-template-columns: 1fr;
     }
     
     .form-row {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 768px) {
+    .tasks-container,
+    .notes-container,
+    .calendar-container,
+    .goals-container,
+    .profile-container {
+        padding: 0 1rem 1rem;
+    }
     
-    .tasks-controls {
+    .task-form-card,
+    .goal-form-card {
+        padding: 1.5rem;
+    }
+    
+    .tasks-controls,
+    .notes-controls,
+    .goals-controls {
         flex-direction: column;
         align-items: stretch;
     }
@@ -551,10 +559,6 @@
     
     .filters {
         justify-content: center;
-    }
-    
-    .kanban-view {
-        grid-template-columns: 1fr;
     }
     
     .view-controls {
