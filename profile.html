@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil 👤 - Mon Assistant</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>Mon Assistant</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
+            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
+            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
+            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
+            <a href="profile.html" class="nav-link active"><i class="fas fa-user"></i> Profil</a>
+        </div>
+        <div class="nav-theme">
+            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+        </div>
+    </nav>
+
+    <main class="profile-main">
+        <div class="page-header">
+            <h1><i class="fas fa-user"></i> Mon Profil</h1>
+            <p>Gère tes préférences et consulte tes statistiques</p>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <!-- Photo de profil -->
+                <div class="profile-picture">
+                    <div class="avatar" id="userAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button class="btn-secondary" onclick="profileManager.changeAvatar()">
+                        <i class="fas fa-camera"></i> Changer
+                    </button>
+                </div>
+
+                <!-- Navigation du profil -->
+                <nav class="profile-nav">
+                    <button class="profile-nav-btn active" data-section="personal">
+                        <i class="fas fa-user-circle"></i> Informations personnelles
+                    </button>
+                    <button class="profile-nav-btn" data-section="preferences">
+                        <i class="fas fa-cog"></i> Préférences
+                    </button>
+                    <button class="profile-nav-btn" data-section="statistics">
+                        <i class="fas fa-chart-bar"></i> Statistiques
+                    </button>
+                    <button class="profile-nav-btn" data-section="security">
+                        <i class="fas fa-shield-alt"></i> Sécurité
+                    </button>
+                    <button class="profile-nav-btn" data-section="backup">
+                        <i class="fas fa-cloud-download-alt"></i> Sauvegarde
+                    </button>
+                </nav>
+
+                <!-- Statistiques rapides -->
+                <div class="profile-stats">
+                    <h3>📊 Aperçu</h3>
+                    <div class="quick-stat">
+                        <span class="stat-label">Tâches créées</span>
+                        <span class="stat-value" id="profileTasksCount">0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="stat-label">Notes écrites</span>
+                        <span class="stat-value" id="profileNotesCount">0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="stat-label">Objectifs actifs</span>
+                        <span class="stat-value" id="profileGoalsCount">0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="stat-label">Événements à venir</span>
+                        <span class="stat-value" id="profileEventsCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <!-- Section Informations personnelles -->
+                <div class="profile-section active" id="personalSection">
+                    <h2><i class="fas fa-user-circle"></i> Informations Personnelles</h2>
+                    <form id="personalInfoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userName">Nom complet</label>
+                                <input type="text" id="userName" value="Étudiant">
+                            </div>
+                            <div class="form-group">
+                                <label for="userEmail">Email</label>
+                                <input type="email" id="userEmail" placeholder="ton@email.com">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userAge">Âge</label>
+                                <input type="number" id="userAge" min="10" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="userLocation">Localisation</label>
+                                <input type="text" id="userLocation" placeholder="Ville, Pays">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userBio">Bio</label>
+                            <textarea id="userBio" placeholder="Parle-nous un peu de toi..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Centres d'intérêt</label>
+                            <div class="interests-tags" id="interestsContainer">
+                                <!-- Tags d'intérêts -->
+                            </div>
+                            <input type="text" id="interestInput" placeholder="Ajouter un centre d'intérêt...">
+                            <button type="button" class="btn-secondary" onclick="profileManager.addInterest()">
+                                <i class="fas fa-plus"></i> Ajouter
+                            </button>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Section Préférences -->
+                <div class="profile-section" id="preferencesSection">
+                    <h2><i class="fas fa-cog"></i> Préférences</h2>
+                    
+                    <div class="preferences-grid">
+                        <div class="preference-item">
+                            <h3>🎨 Thème de l'application</h3>
+                            <div class="theme-options">
+                                <label class="theme-option">
+                                    <input type="radio" name="theme" value="light" checked>
+                                    <div class="theme-preview light-theme">
+                                        <div class="preview-header"></div>
+                                        <div class="preview-content"></div>
+                                    </div>
+                                    <span>Clair</span>
+                                </label>
+                                <label class="theme-option">
+                                    <input type="radio" name="theme" value="dark">
+                                    <div class="theme-preview dark-theme">
+                                        <div class="preview-header"></div>
+                                        <div class="preview-content"></div>
+                                    </div>
+                                    <span>Sombre</span>
+                                </label>
+                                <label class="theme-option">
+                                    <input type="radio" name="theme" value="auto">
+                                    <div class="theme-preview auto-theme">
+                                        <div class="preview-header"></div>
+                                        <div class="preview-content"></div>
+                                    </div>
+                                    <span>Auto</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-item">
+                            <h3>🔔 Notifications</h3>
+                            <div class="toggle-options">
+                                <label class="toggle-item">
+                                    <input type="checkbox" id="notifyTasks" checked>
+                                    <span class="toggle-slider"></span>
+                                    Rappels de tâches
+                                </label>
+                                <label class="toggle-item">
+                                    <input type="checkbox" id="notifyEvents" checked>
+                                    <span class="toggle-slider"></span>
+                                    Rappels d'événements
+                                </label>
+                                <label class="toggle-item">
+                                    <input type="checkbox" id="notifyGoals">
+                                    <span class="toggle-slider"></span>
+                                    Progression des objectifs
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-item">
+                            <h3>📱 Affichage</h3>
+                            <div class="display-options">
+                                <label class="select-item">
+                                    Vue par défaut du dashboard
+                                    <select id="defaultView">
+                                        <option value="overview">Vue d'ensemble</option>
+                                        <option value="tasks">Tâches</option>
+                                        <option value="calendar">Calendrier</option>
+                                    </select>
+                                </label>
+                                <label class="select-item">
+                                    Densité d'affichage
+                                    <select id="displayDensity">
+                                        <option value="comfortable">Confortable</option>
+                                        <option value="compact">Compact</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-item">
+                            <h3>🗂️ Organisation</h3>
+                            <div class="organization-options">
+                                <label class="select-item">
+                                    Tri par défaut des tâches
+                                    <select id="tasksSort">
+                                        <option value="dueDate">Date d'échéance</option>
+                                        <option value="priority">Priorité</option>
+                                        <option value="created">Date de création</option>
+                                    </select>
+                                </label>
+                                <label class="select-item">
+                                    Groupement des notes
+                                    <select id="notesGrouping">
+                                        <option value="category">Par catégorie</option>
+                                        <option value="date">Par date</option>
+                                        <option value="none">Aucun</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-primary" onclick="profileManager.savePreferences()">
+                            <i class="fas fa-save"></i> Sauvegarder les préférences
+                        </button>
+                        <button class="btn-secondary" onclick="profileManager.resetPreferences()">
+                            <i class="fas fa-undo"></i> Réinitialiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section Statistiques -->
+                <div class="profile-section" id="statisticsSection">
+                    <h2><i class="fas fa-chart-bar"></i> Mes Statistiques</h2>
+                    
+                    <div class="stats-overview">
+                        <div class="stat-card large">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalTasksCreated">0</h3>
+                                <p>Tâches créées au total</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+12% ce mois</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card large">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="tasksCompletionRate">0%</h3>
+                                <p>Taux de completion</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+5% cette semaine</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card large">
+                            <div class="stat-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="goalsAchieved">0</h3>
+                                <p>Objectifs atteints</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>Meilleur mois : Janvier</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <h3>Productivité hebdomadaire</h3>
+                            <canvas id="weeklyProductivityChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Répartition des tâches</h3>
+                            <canvas id="tasksDistributionChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Évolution des objectifs</h3>
+                            <canvas id="goalsProgressChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Activité par heure</h3>
+                            <canvas id="hourlyActivityChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="achievements-section">
+                        <h3>🏆 Badges et Réussites</h3>
+                        <div class="achievements-grid" id="achievementsContainer">
+                            <!-- Badges seront chargés ici -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Autres sections (Sécurité, Sauvegarde) -->
+                <div class="profile-section" id="securitySection">
+                    <h2><i class="fas fa-shield-alt"></i> Sécurité</h2>
+                    <!-- Contenu sécurité -->
+                </div>
+
+                <div class="profile-section" id="backupSection">
+                    <h2><i class="fas fa-cloud-download-alt"></i> Sauvegarde & Restauration</h2>
+                    <!-- Contenu sauvegarde -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/profile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
