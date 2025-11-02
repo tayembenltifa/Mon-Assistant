@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objectifs 🎯 - Mon Assistant</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>Mon Assistant</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
+            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
+            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
+            <a href="goals.html" class="nav-link active"><i class="fas fa-bullseye"></i> Objectifs</a>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+        </div>
+        <div class="nav-theme">
+            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+        </div>
+    </nav>
+
+    <main class="goals-main">
+        <div class="page-header">
+            <h1><i class="fas fa-bullseye"></i> Mes Objectifs</h1>
+            <p>Définis tes objectifs et suis ta progression</p>
+        </div>
+
+        <div class="goals-container">
+            <!-- Formulaire de création d'objectif -->
+            <div class="goal-form-card">
+                <h3><i class="fas fa-plus"></i> Nouvel Objectif</h3>
+                <form id="goalForm">
+                    <div class="form-group">
+                        <label for="goalTitle">Titre de l'objectif</label>
+                        <input type="text" id="goalTitle" required placeholder="Quel est ton objectif ?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalDescription">Description</label>
+                        <textarea id="goalDescription" placeholder="Décris ton objectif en détail..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goalCategory">Catégorie</label>
+                            <select id="goalCategory">
+                                <option value="personal">Développement personnel</option>
+                                <option value="career">Carrière</option>
+                                <option value="education">Éducation</option>
+                                <option value="health">Santé & Fitness</option>
+                                <option value="financial">Finances</option>
+                                <option value="relationships">Relations</option>
+                                <option value="hobbies">Loisirs</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goalPriority">Priorité</label>
+                            <select id="goalPriority">
+                                <option value="low">Basse</option>
+                                <option value="medium">Moyenne</option>
+                                <option value="high">Haute</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goalStartDate">Date de début</label>
+                            <input type="date" id="goalStartDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goalTargetDate">Date cible</label>
+                            <input type="date" id="goalTargetDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalType">Type d'objectif</label>
+                        <select id="goalType" onchange="goalsManager.toggleGoalType()">
+                            <option value="binary">Objectif simple (fait/pas fait)</option>
+                            <option value="numeric">Objectif numérique (avec progression)</option>
+                            <option value="habit">Habitude (répétitive)</option>
+                        </select>
+                    </div>
+
+                    <!-- Champs pour objectif numérique -->
+                    <div class="goal-numeric-fields" id="numericFields" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="goalTargetValue">Valeur cible</label>
+                                <input type="number" id="goalTargetValue" placeholder="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="goalCurrentValue">Valeur actuelle</label>
+                                <input type="number" id="goalCurrentValue" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="goalUnit">Unité</label>
+                                <input type="text" id="goalUnit" placeholder="kg, km, €, etc.">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Champs pour habitude -->
+                    <div class="goal-habit-fields" id="habitFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Fréquence</label>
+                            <div class="frequency-options">
+                                <label><input type="radio" name="frequency" value="daily" checked> Quotidien</label>
+                                <label><input type="radio" name="frequency" value="weekly"> Hebdomadaire</label>
+                                <label><input type="radio" name="frequency" value="monthly"> Mensuel</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-bullseye"></i> Créer l'Objectif
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="goalsManager.clearForm()">
+                            <i class="fas fa-eraser"></i> Effacer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Statistiques des objectifs -->
+            <div class="goals-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalGoals">0</h3>
+                        <p>Objectifs totaux</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completedGoals">0</h3>
+                        <p>Objectifs atteints</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="successRate">0%</h3>
+                        <p>Taux de réussite</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeGoals">0</h3>
+                        <p>En cours</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtres et recherche -->
+            <div class="goals-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="goalsSearch" placeholder="Rechercher un objectif...">
+                </div>
+
+                <div class="filters">
+                    <select id="statusFilter">
+                        <option value="all">Tous les statuts</option>
+                        <option value="active">En cours</option>
+                        <option value="completed">Atteints</option>
+                        <option value="overdue">En retard</option>
+                    </select>
+
+                    <select id="categoryFilter">
+                        <option value="all">Toutes catégories</option>
+                        <option value="personal">Personnel</option>
+                        <option value="career">Carrière</option>
+                        <option value="education">Éducation</option>
+                        <option value="health">Santé</option>
+                        <option value="financial">Finances</option>
+                    </select>
+
+                    <select id="typeFilter">
+                        <option value="all">Tous types</option>
+                        <option value="binary">Simple</option>
+                        <option value="numeric">Numérique</option>
+                        <option value="habit">Habitude</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Liste des objectifs -->
+            <div class="goals-list" id="goalsList">
+                <!-- Les objectifs seront chargés ici -->
+            </div>
+
+            <!-- Graphiques de progression -->
+            <div class="goals-charts">
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-pie"></i> Répartition par catégorie</h3>
+                    <canvas id="goalsByCategoryChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-line"></i> Progression mensuelle</h3>
+                    <canvas id="monthlyProgressChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/goals.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
