@@ -1,4 +1,4 @@
-// Application principale
+// Application principale avec Assistant IA
 class PersonalAssistant {
     constructor() {
         this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -15,16 +15,197 @@ class PersonalAssistant {
         this.updateDashboard();
         this.setupTheme();
         this.updateTimeGreeting();
-        this.loadWeather();
-        this.setupServiceWorker();
+        this.setupAIAssistant();
     }
 
     setupEventListeners() {
         // Thème
-        document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
         
+        // Assistant IA
+        const aiInput = document.getElementById('aiInput');
+        if (aiInput) {
+            aiInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.sendAIMessage();
+                }
+            });
+        }
+
         // Raccourcis clavier
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+    }
+
+    // Assistant IA
+    setupAIAssistant() {
+        this.aiMessages = JSON.parse(localStorage.getItem('aiMessages')) || [];
+        this.renderAIMessages();
+    }
+
+    sendAIMessage() {
+        const input = document.getElementById('aiInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        // Ajouter le message de l'utilisateur
+        this.addAIMessage('user', message);
+        input.value = '';
+
+        // Simuler une réponse de l'IA
+        setTimeout(() => {
+            const response = this.generateAIResponse(message);
+            this.addAIMessage('assistant', response);
+        }, 1000 + Math.random() * 1000); // Délai aléatoire pour plus de réalisme
+    }
+
+    addAIMessage(sender, content) {
+        const message = {
+            id: Date.now(),
+            sender: sender,
+            content: content,
+            timestamp: new Date().toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            })
+        };
+
+        this.aiMessages.push(message);
+        
+        // Garder seulement les 50 derniers messages
+        if (this.aiMessages.length > 50) {
+            this.aiMessages = this.aiMessages.slice(-50);
+        }
+
+        this.saveAIMessages();
+        this.renderAIMessages();
+    }
+
+    generateAIResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        // Réponses contextuelles basées sur le contenu du message
+        if (message.includes('bonjour') || message.includes('salut') || message.includes('coucou')) {
+            return "Bonjour ! Comment puis-je vous aider aujourd'hui ? 😊";
+        }
+
+        if (message.includes('merci')) {
+            return "De rien ! N'hésitez pas si vous avez d'autres questions. 👍";
+        }
+
+        if (message.includes('tâche') || message.includes('todo') || message.includes('à faire')) {
+            const pendingTasks = this.tasks.filter(task => !task.completed).length;
+            if (pendingTasks === 0) {
+                return "Super ! Vous n'avez aucune tâche en attente. 🎉";
+            } else {
+                return `Vous avez ${pendingTasks} tâche${pendingTasks > 1 ? 's' : ''} en attente. N'oubliez pas de les prioriser !`;
+            }
+        }
+
+        if (message.includes('note') || message.includes('memo')) {
+            const totalNotes = this.notes.length;
+            if (totalNotes === 0) {
+                return "Vous n'avez pas encore de notes. Voulez-vous que je vous aide à en créer une ?";
+            } else {
+                return `Vous avez ${totalNotes} note${totalNotes > 1 ? 's' : ''} sauvegardée${totalNotes > 1 ? 's' : ''}.`;
+            }
+        }
+
+        if (message.includes('objectif') || message.includes('but')) {
+            const activeGoals = this.goals.filter(goal => !goal.completed).length;
+            const completedGoals = this.goals.filter(goal => goal.completed).length;
+            
+            if (activeGoals === 0 && completedGoals === 0) {
+                return "Vous n'avez pas encore défini d'objectifs. Voulez-vous commencer ?";
+            } else {
+                return `Vous avez ${activeGoals} objectif${activeGoals > 1 ? 's' : ''} en cours et ${completedGoals} atteint${completedGoals > 1 ? 's' : ''}. Continuez comme ça ! 💪`;
+            }
+        }
+
+        if (message.includes('aide') || message.includes('help')) {
+            return `Je peux vous aider avec :
+• La gestion de vos tâches
+• La prise de notes
+• Le suivi de vos objectifs
+• L'organisation de votre temps
+• Des conseils de productivité
+
+Que souhaitez-vous faire ?`;
+        }
+
+        if (message.includes('heure')) {
+            return `Il est ${new Date().toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            })}.`;
+        }
+
+        if (message.includes('date')) {
+            return `Nous sommes le ${new Date().toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}.`;
+        }
+
+        if (message.includes('blague') || message.includes('rigole')) {
+            const jokes = [
+                "Pourquoi les plongeurs plongent-ils toujours en arrière et pas en avant ? Parce que sinon ils tombent dans le bateau !",
+                "Qu'est-ce qu'un canard en pleine forme ? Un canard en forme de bouée !",
+                "Pourquoi les programmeurs préfèrent-ils le mode sombre ? Parce que la lumière attire les bugs !",
+                "Quel est le comble pour un électricien ? De ne pas être au courant !"
+            ];
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
+        if (message.includes('motivation') || message.includes('encourage')) {
+            const motivations = [
+                "Vous faites du super travail ! Continuez comme ça ! 🚀",
+                "Chaque petite étape vous rapproche de votre objectif. 💫",
+                "La persévérance est la clé du succès. Vous y êtes presque ! 🌟",
+                "N'oubliez pas de célébrer vos petites victoires ! 🎉",
+                "Vous êtes capable de grandes choses ! Croyez en vous. 💪"
+            ];
+            return motivations[Math.floor(Math.random() * motivations.length)];
+        }
+
+        // Réponses par défaut
+        const defaultResponses = [
+            "Je comprends. Pouvez-vous me donner plus de détails ?",
+            "Intéressant ! Comment puis-je vous aider avec cela ?",
+            "Je vois. Avez-vous besoin d'aide pour organiser cela ?",
+            "C'est une bonne question. Laissez-moi réfléchir à la meilleure façon de vous aider.",
+            "Je peux vous aider à planifier cela. Par où souhaitez-vous commencer ?",
+            "D'accord. Voulez-vous que nous créions une tâche ou une note à ce sujet ?",
+            "Je suis là pour vous aider à rester organisé. Que souhaitez-vous accomplir ?"
+        ];
+
+        return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    }
+
+    renderAIMessages() {
+        const container = document.getElementById('aiMessages');
+        if (!container) return;
+
+        container.innerHTML = this.aiMessages.map(message => `
+            <div class="message ${message.sender}-message">
+                <div class="message-content">
+                    <div class="message-text">${message.content}</div>
+                    <div class="message-time">${message.timestamp}</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Scroll vers le bas
+        container.scrollTop = container.scrollHeight;
+    }
+
+    saveAIMessages() {
+        localStorage.setItem('aiMessages', JSON.stringify(this.aiMessages));
     }
 
     // Gestion du thème
@@ -45,7 +226,9 @@ class PersonalAssistant {
 
     updateThemeIcon(theme) {
         const icon = document.querySelector('#themeToggle i');
-        icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        if (icon) {
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
     }
 
     // Mise à jour du dashboard
@@ -54,35 +237,37 @@ class PersonalAssistant {
         this.updateRecentTasks();
         this.updateRecentNotes();
         this.updateTodayEvents();
-        this.updateGoalsProgress();
     }
 
     updateStats() {
-        document.getElementById('totalTasks').textContent = this.tasks.length;
-        document.getElementById('completedTasks').textContent = 
-            this.tasks.filter(task => task.completed).length;
-        document.getElementById('totalNotes').textContent = this.notes.length;
-        document.getElementById('activeGoals').textContent = 
-            this.goals.filter(goal => !goal.completed).length;
+        this.updateElement('totalTasks', this.tasks.length);
+        this.updateElement('completedTasks', this.tasks.filter(task => task.completed).length);
+        this.updateElement('totalNotes', this.notes.length);
+        this.updateElement('activeGoals', this.goals.filter(goal => !goal.completed).length);
+    }
+
+    updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
     }
 
     updateRecentTasks() {
         const container = document.getElementById('recentTasks');
+        if (!container) return;
+
         const recentTasks = this.tasks
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .slice(0, 5);
 
         container.innerHTML = recentTasks.map(task => `
-            <div class="task-item fade-in">
-                <div class="task-checkbox ${task.completed ? 'checked' : ''}" 
-                     onclick="app.toggleTask(${task.id})">
+            <div class="task-item ${task.completed ? 'completed' : ''}">
+                <div class="task-checkbox ${task.completed ? 'checked' : ''}">
                     ${task.completed ? '✓' : ''}
                 </div>
                 <div class="task-content">
                     <div class="task-title">${task.title}</div>
-                    <div class="task-meta">
-                        ${this.formatDate(task.dueDate)} • ${task.priority}
-                    </div>
                 </div>
             </div>
         `).join('');
@@ -90,24 +275,27 @@ class PersonalAssistant {
 
     updateRecentNotes() {
         const container = document.getElementById('recentNotes');
+        if (!container) return;
+
         const recentNotes = this.notes
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .slice(0, 5);
 
         container.innerHTML = recentNotes.map(note => `
-            <div class="note-item fade-in">
+            <div class="note-item">
                 <div class="note-title">${note.title}</div>
-                <div class="note-preview">${note.content.substring(0, 100)}...</div>
-                <div class="note-meta">${this.formatDate(note.createdAt)}</div>
+                <div class="note-preview">${note.content.substring(0, 50)}...</div>
             </div>
         `).join('');
     }
 
     updateTodayEvents() {
         const container = document.getElementById('todayEvents');
+        if (!container) return;
+
         const today = new Date().toDateString();
         const todayEvents = this.events.filter(event => 
-            new Date(event.date).toDateString() === today
+            new Date(event.startDate).toDateString() === today
         );
 
         document.getElementById('todayDate').textContent = this.formatDate(new Date());
@@ -116,7 +304,7 @@ class PersonalAssistant {
             container.innerHTML = '<p class="no-events">Aucun événement aujourd\'hui</p>';
         } else {
             container.innerHTML = todayEvents.map(event => `
-                <div class="event-item fade-in">
+                <div class="event-item">
                     <div class="event-time">${event.time}</div>
                     <div class="event-title">${event.title}</div>
                 </div>
@@ -124,52 +312,14 @@ class PersonalAssistant {
         }
     }
 
-    updateGoalsProgress() {
-        const totalGoals = this.goals.length;
-        const completedGoals = this.goals.filter(goal => goal.completed).length;
-        const progress = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0;
-        
-        // Mettre à jour le graphique (sera implémenté dans charts.js)
-        if (window.updateProgressChart) {
-            window.updateProgressChart(progress);
-        }
-    }
-
-    // Gestion des tâches
-    toggleTask(taskId) {
-        this.tasks = this.tasks.map(task => 
-            task.id === taskId ? { ...task, completed: !task.completed } : task
-        );
-        this.saveTasks();
-        this.updateDashboard();
-    }
-
-    addTask(task) {
-        const newTask = {
-            id: Date.now(),
-            createdAt: new Date().toISOString(),
-            completed: false,
-            ...task
-        };
-        this.tasks.push(newTask);
-        this.saveTasks();
-        this.updateDashboard();
-        this.showNotification('Tâche ajoutée avec succès !');
-    }
-
-    saveTasks() {
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
-    }
-
     // Utilitaires
-    formatDate(dateString) {
-        const options = { 
-            weekday: 'short', 
+    formatDate(date) {
+        return date.toLocaleDateString('fr-FR', { 
+            weekday: 'long', 
             year: 'numeric', 
-            month: 'short', 
+            month: 'long', 
             day: 'numeric' 
-        };
-        return new Date(dateString).toLocaleDateString('fr-FR', options);
+        });
     }
 
     updateTimeGreeting() {
@@ -180,61 +330,10 @@ class PersonalAssistant {
         else if (hour < 18) greeting = 'Bon après-midi';
         else greeting = 'Bonsoir';
         
-        document.getElementById('timeGreeting').textContent = greeting;
-    }
-
-    async loadWeather() {
-        try {
-            // Utiliser une API météo gratuite
-            const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current_weather=true');
-            const data = await response.json();
-            
-            const temp = Math.round(data.current_weather.temperature);
-            const weatherCode = data.current_weather.weathercode;
-            
-            const weatherWidget = document.getElementById('weatherWidget');
-            weatherWidget.innerHTML = `
-                <i class="fas ${this.getWeatherIcon(weatherCode)}"></i>
-                <span>${temp}°C</span>
-            `;
-        } catch (error) {
-            console.log('Impossible de charger la météo');
+        const greetingElement = document.getElementById('timeGreeting');
+        if (greetingElement) {
+            greetingElement.textContent = greeting;
         }
-    }
-
-    getWeatherIcon(weatherCode) {
-        // Mapping simplifié des codes météo
-        if (weatherCode <= 3) return 'fa-sun';
-        if (weatherCode <= 48) return 'fa-cloud';
-        if (weatherCode <= 67) return 'fa-cloud-rain';
-        return 'fa-snowflake';
-    }
-
-    // Notifications
-    showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        
-        Object.assign(notification.style, {
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            padding: '1rem 1.5rem',
-            background: type === 'success' ? 'var(--success-color)' : 'var(--danger-color)',
-            color: 'white',
-            borderRadius: 'var(--border-radius)',
-            boxShadow: 'var(--shadow)',
-            zIndex: '10000',
-            animation: 'slideIn 0.3s ease'
-        });
-
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideIn 0.3s ease reverse';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
     }
 
     // Raccourcis clavier
@@ -257,53 +356,84 @@ class PersonalAssistant {
         }
     }
 
-    // Service Worker pour PWA
-    setupServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => console.log('SW registered'))
-                .catch(error => console.log('SW registration failed'));
-        }
+    // Notifications
+    showNotification(message, type = 'success') {
+        // Créer une notification simple
+        console.log(`${type.toUpperCase()}: ${message}`);
+        
+        // Tu peux ajouter un système de notifications visuelles ici plus tard
+        alert(message); // Solution temporaire
     }
 }
 
 // Initialisation de l'application
 const app = new PersonalAssistant();
 
-// Fonction globale pour l'assistant IA
+// Fonctions globales pour l'HTML
 function sendMessage() {
-    const input = document.getElementById('aiInput');
-    const message = input.value.trim();
+    app.sendAIMessage();
+}
+
+function toggleTheme() {
+    app.toggleTheme();
+}
+
+function addTask() {
+    const input = document.getElementById('newTask');
+    const text = input.value.trim();
     
-    if (message) {
-        const messagesContainer = document.getElementById('aiMessages');
+    if (text) {
+        const task = {
+            id: Date.now(),
+            title: text,
+            completed: false,
+            createdAt: new Date().toISOString()
+        };
         
-        // Ajouter le message de l'utilisateur
-        const userMessage = document.createElement('div');
-        userMessage.className = 'message user-message';
-        userMessage.textContent = message;
-        messagesContainer.appendChild(userMessage);
-        
+        app.tasks.push(task);
+        app.saveTasks();
+        app.updateDashboard();
         input.value = '';
-        
-        // Simuler une réponse de l'IA
-        setTimeout(() => {
-            const aiMessage = document.createElement('div');
-            aiMessage.className = 'message ai-message';
-            aiMessage.textContent = getAIResponse(message);
-            messagesContainer.appendChild(aiMessage);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1000);
+        app.showNotification('Tâche ajoutée !');
     }
 }
 
-function getAIResponse(message) {
-    const responses = [
-        "Je peux t'aider à organiser tes tâches et notes !",
-        "N'oublie pas de prioriser tes tâches importantes.",
-        "As-tu pensé à planifier ta semaine ?",
-        "Je te recommande de diviser les grosses tâches en petites étapes.",
-        "N'oublie pas de prendre des pauses régulières !"
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
+function addNote() {
+    const titleInput = document.getElementById('noteTitle');
+    const contentInput = document.getElementById('noteContent');
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+    
+    if (title && content) {
+        const note = {
+            id: Date.now(),
+            title: title,
+            content: content,
+            createdAt: new Date().toISOString()
+        };
+        
+        app.notes.push(note);
+        app.saveNotes();
+        app.updateDashboard();
+        titleInput.value = '';
+        contentInput.value = '';
+        app.showNotification('Note sauvegardée !');
+    }
 }
+
+// Méthodes de sauvegarde
+PersonalAssistant.prototype.saveTasks = function() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+};
+
+PersonalAssistant.prototype.saveNotes = function() {
+    localStorage.setItem('notes', JSON.stringify(this.notes));
+};
+
+PersonalAssistant.prototype.saveGoals = function() {
+    localStorage.setItem('goals', JSON.stringify(this.goals));
+};
+
+PersonalAssistant.prototype.saveEvents = function() {
+    localStorage.setItem('events', JSON.stringify(this.events));
+};
