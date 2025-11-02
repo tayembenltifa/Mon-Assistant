@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Assistant Personnel 🌟</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- Particules animées -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <h1>🌟 Mon Assistant Personnel</h1>
+            <div class="subtitle">Ton compagnon intelligent pour organiser ta vie</div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Widget Tâches -->
+            <div class="widget">
+                <h2>📝 Mes Tâches</h2>
+                <div class="input-group">
+                    <input type="text" id="newTask" placeholder="Quelle est ta prochaine tâche ?">
+                    <button onclick="addTask()">Ajouter</button>
+                </div>
+                <div class="task-list" id="taskList"></div>
+            </div>
+
+            <!-- Widget Notes -->
+            <div class="widget">
+                <h2>📓 Notes Perso</h2>
+                <input type="text" id="noteTitle" placeholder="Titre de la note">
+                <textarea id="noteContent" placeholder="Écris tes pensées, idées, rappels..."></textarea>
+                <button onclick="addNote()">Sauvegarder la Note</button>
+                <div class="notes-list" id="notesList"></div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">Tâches totales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedTasks">0</div>
+                <div class="stat-label">Tâches terminées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalNotes">0</div>
+                <div class="stat-label">Notes sauvegardées</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
