@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Personnelles 📓 - Mon Assistant</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>Mon Assistant</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
+            <a href="notes.html" class="nav-link active"><i class="fas fa-sticky-note"></i> Notes</a>
+            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
+            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+        </div>
+        <div class="nav-theme">
+            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+        </div>
+    </nav>
+
+    <main class="notes-main">
+        <div class="page-header">
+            <h1><i class="fas fa-sticky-note"></i> Notes Personnelles</h1>
+            <p>Capture tes idées, pensées et informations importantes</p>
+        </div>
+
+        <div class="notes-container">
+            <!-- Barre d'outils -->
+            <div class="notes-toolbar">
+                <button class="btn-primary" onclick="notesManager.createNewNote()">
+                    <i class="fas fa-plus"></i> Nouvelle Note
+                </button>
+                
+                <div class="notes-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="notesSearch" placeholder="Rechercher dans les notes...">
+                </div>
+
+                <div class="notes-filters">
+                    <select id="categoryFilter">
+                        <option value="all">Toutes les catégories</option>
+                        <option value="personal">Personnel</option>
+                        <option value="work">Travail</option>
+                        <option value="study">Études</option>
+                        <option value="ideas">Idées</option>
+                        <option value="projects">Projets</option>
+                    </select>
+                    
+                    <select id="sortFilter">
+                        <option value="newest">Plus récentes</option>
+                        <option value="oldest">Plus anciennes</option>
+                        <option value="title">Par titre</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Éditeur de note -->
+            <div class="note-editor" id="noteEditor" style="display: none;">
+                <div class="editor-header">
+                    <input type="text" id="noteTitle" placeholder="Titre de la note" class="note-title-input">
+                    <div class="editor-actions">
+                        <button class="btn-success" onclick="notesManager.saveNote()">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                        <button class="btn-secondary" onclick="notesManager.cancelEdit()">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                    </div>
+                </div>
+
+                <div class="editor-toolbar">
+                    <button onclick="notesManager.formatText('bold')"><i class="fas fa-bold"></i></button>
+                    <button onclick="notesManager.formatText('italic')"><i class="fas fa-italic"></i></button>
+                    <button onclick="notesManager.formatText('underline')"><i class="fas fa-underline"></i></button>
+                    <button onclick="notesManager.insertList('ul')"><i class="fas fa-list-ul"></i></button>
+                    <button onclick="notesManager.insertList('ol')"><i class="fas fa-list-ol"></i></button>
+                    <button onclick="notesManager.insertLink()"><i class="fas fa-link"></i></button>
+                    <button onclick="notesManager.insertImage()"><i class="fas fa-image"></i></button>
+                    
+                    <select onchange="notesManager.changeCategory(this.value)" id="editorCategory">
+                        <option value="personal">Personnel</option>
+                        <option value="work">Travail</option>
+                        <option value="study">Études</option>
+                        <option value="ideas">Idées</option>
+                        <option value="projects">Projets</option>
+                    </select>
+                </div>
+
+                <div class="editor-content">
+                    <textarea id="noteContent" placeholder="Commence à écrire ta note ici..."></textarea>
+                    <div class="editor-preview" id="notePreview"></div>
+                </div>
+
+                <div class="editor-tags">
+                    <input type="text" id="tagInput" placeholder="Ajouter un tag...">
+                    <button onclick="notesManager.addTag()"><i class="fas fa-tag"></i></button>
+                    <div class="tags-container" id="tagsContainer"></div>
+                </div>
+            </div>
+
+            <!-- Grille des notes -->
+            <div class="notes-grid" id="notesGrid">
+                <!-- Les notes seront chargées ici -->
+            </div>
+
+            <!-- Vue liste -->
+            <div class="notes-list-view" id="notesListView" style="display: none;">
+                <!-- Vue liste des notes -->
+            </div>
+
+            <!-- Statistiques -->
+            <div class="notes-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalNotesCount">0</h3>
+                        <p>Notes totales</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="categoriesCount">0</h3>
+                        <p>Catégories</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="tagsCount">0</h3>
+                        <p>Tags utilisés</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="recentNotesCount">0</h3>
+                        <p>Notes ce mois</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/notes.js"></script>
+</body>
+</html>
