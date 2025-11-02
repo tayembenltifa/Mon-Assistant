@@ -1,27 +1,43 @@
 # 🌟 Mon Assistant Personnel
 
-Une application web moderne pour gérer tes tâches et notes personnelles.
+Une application web complète de productivité et d'organisation personnelle.
 
 ## ✨ Fonctionnalités
 
-- ✅ Gestion de tâches avec statut
-- 📝 Notes personnelles avec sauvegarde
-- 📊 Statistiques en temps réel
-- 🎨 Design moderne avec animations
-- 📱 Responsive design
-- 💾 Sauvegarde locale des données
+### 📋 Gestion des Tâches
+- Création et organisation de tâches
+- Système de priorités et catégories
+- Dates d'échéance et rappels
+- Vues liste et Kanban
+- Recherche et filtres avancés
 
-## 🚀 Utilisation
+### 📓 Notes Personnelles
+- Éditeur de notes riche
+- Catégorisation et tags
+- Recherche plein texte
+- Sauvegarde automatique
+- Export/Import des notes
 
-1. Ouvre `index.html` dans ton navigateur
-2. Ajoute tes tâches et notes
-3. Tout est sauvegardé automatiquement
+### 📅 Calendrier Intelligent
+- Vues mois, semaine, jour et agenda
+- Événements colorés par catégorie
+- Rappels et notifications
+- Synchronisation des tâches
 
-## 🛠️ Technologies
+### 🎯 Suivi des Objectifs
+- Objectifs simples, numériques et habitudes
+- Suivi de progression détaillé
+- Graphiques de performance
+- Système de récompenses
 
-- HTML5
-- CSS3 avec animations
-- JavaScript vanilla
-- Local Storage pour la sauvegarde
+### 👤 Profil Personnalisable
+- Thèmes clair/sombre/automatique
+- Préférences utilisateur
+- Statistiques détaillées
+- Système de badges
 
-## 📄 Structure
+## 🚀 Installation
+
+1. **Clone le repository :**
+```bash
+git clone https://github.com/ton-username/mon-assistant.git
