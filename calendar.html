@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendrier 📅 - Mon Assistant</title>
+    <title>Calendrier - Mon Assistant</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="calendar.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <nav class="navbar">
@@ -15,208 +14,49 @@
             <span>Mon Assistant</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Accueil</a>
-            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
-            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
-            <a href="calendar.html" class="nav-link active"><i class="fas fa-calendar"></i> Calendrier</a>
-            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="tasks.html" class="nav-link">
+                <i class="fas fa-tasks"></i> Tâches
+            </a>
+            <a href="notes.html" class="nav-link">
+                <i class="fas fa-sticky-note"></i> Notes
+            </a>
+            <a href="calendar.html" class="nav-link active">
+                <i class="fas fa-calendar"></i> Calendrier
+            </a>
+            <a href="goals.html" class="nav-link">
+                <i class="fas fa-bullseye"></i> Objectifs
+            </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+            <button id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
 
-    <main class="calendar-main">
-        <div class="page-header">
+    <main class="dashboard-main">
+        <div class="dashboard-header">
             <h1><i class="fas fa-calendar"></i> Calendrier</h1>
-            <p>Organise ton temps et planifie tes activités</p>
+            <p>Organise ton temps</p>
         </div>
 
-        <div class="calendar-container">
-            <!-- Contrôles du calendrier -->
-            <div class="calendar-controls">
-                <div class="view-controls">
-                    <button class="view-btn active" data-view="month">Mois</button>
-                    <button class="view-btn" data-view="week">Semaine</button>
-                    <button class="view-btn" data-view="day">Jour</button>
-                    <button class="view-btn" data-view="agenda">Agenda</button>
-                </div>
-
-                <div class="navigation-controls">
-                    <button class="nav-btn" onclick="calendar.previous()">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <h2 id="currentPeriod">Mois Actuel</h2>
-                    <button class="nav-btn" onclick="calendar.next()">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-
-                <div class="action-controls">
-                    <button class="btn-primary" onclick="calendar.showEventForm()">
-                        <i class="fas fa-plus"></i> Nouvel Événement
-                    </button>
-                    <button class="btn-secondary" onclick="calendar.today()">
-                        <i class="fas fa-calendar-day"></i> Aujourd'hui
-                    </button>
-                </div>
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h2><i class="fas fa-calendar-day"></i> Calendrier du Mois</h2>
             </div>
-
-            <!-- Formulaire d'événement -->
-            <div class="event-form-modal" id="eventFormModal" style="display: none;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-calendar-plus"></i> Nouvel Événement</h3>
-                        <button class="close-btn" onclick="calendar.hideEventForm()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <form id="eventForm">
-                        <div class="form-group">
-                            <label for="eventTitle">Titre de l'événement</label>
-                            <input type="text" id="eventTitle" required>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="eventStartDate">Date de début</label>
-                                <input type="datetime-local" id="eventStartDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventEndDate">Date de fin</label>
-                                <input type="datetime-local" id="eventEndDate" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eventDescription">Description</label>
-                            <textarea id="eventDescription" rows="3"></textarea>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="eventColor">Couleur</label>
-                                <div class="color-picker">
-                                    <input type="color" id="eventColor" value="#667eea">
-                                    <div class="color-options">
-                                        <div class="color-option" style="background: #667eea;" data-color="#667eea"></div>
-                                        <div class="color-option" style="background: #f093fb;" data-color="#f093fb"></div>
-                                        <div class="color-option" style="background: #f5576c;" data-color="#f5576c"></div>
-                                        <div class="color-option" style="background: #4facfe;" data-color="#4facfe"></div>
-                                        <div class="color-option" style="background: #43e97b;" data-color="#43e97b"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="eventCategory">Catégorie</label>
-                                <select id="eventCategory">
-                                    <option value="personal">Personnel</option>
-                                    <option value="work">Travail</option>
-                                    <option value="study">Études</option>
-                                    <option value="health">Santé</option>
-                                    <option value="social">Social</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="eventAllDay"> Événement toute la journée
-                            </label>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Sauvegarder</button>
-                            <button type="button" class="btn-secondary" onclick="calendar.hideEventForm()">Annuler</button>
-                            <button type="button" class="btn-danger" id="deleteEventBtn" style="display: none;">Supprimer</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Vue Mois -->
-            <div class="calendar-view month-view" id="monthView">
-                <div class="calendar-header">
-                    <div class="day-header">Lun</div>
-                    <div class="day-header">Mar</div>
-                    <div class="day-header">Mer</div>
-                    <div class="day-header">Jeu</div>
-                    <div class="day-header">Ven</div>
-                    <div class="day-header">Sam</div>
-                    <div class="day-header">Dim</div>
-                </div>
-                <div class="calendar-grid" id="monthGrid">
-                    <!-- Les jours du mois seront générés ici -->
-                </div>
-            </div>
-
-            <!-- Vue Semaine -->
-            <div class="calendar-view week-view" id="weekView" style="display: none;">
-                <div class="week-header">
-                    <div class="time-column">Heure</div>
-                    <div class="day-column" id="weekDaysHeader">
-                        <!-- En-têtes des jours de la semaine -->
-                    </div>
-                </div>
-                <div class="week-grid" id="weekGrid">
-                    <!-- Grille hebdomadaire -->
-                </div>
-            </div>
-
-            <!-- Vue Jour -->
-            <div class="calendar-view day-view" id="dayView" style="display: none;">
-                <div class="day-header">
-                    <h3 id="currentDay">Date du jour</h3>
-                </div>
-                <div class="day-timeline" id="dayTimeline">
-                    <!-- Timeline de la journée -->
-                </div>
-            </div>
-
-            <!-- Vue Agenda -->
-            <div class="calendar-view agenda-view" id="agendaView" style="display: none;">
-                <div class="agenda-list" id="agendaList">
-                    <!-- Liste des événements à venir -->
-                </div>
-            </div>
-
-            <!-- Panneau latéral des événements -->
-            <div class="events-sidebar">
-                <h3><i class="fas fa-list"></i> Événements à venir</h3>
-                <div class="upcoming-events" id="upcomingEvents">
-                    <!-- Événements à venir -->
-                </div>
-                
-                <h3><i class="fas fa-tags"></i> Catégories</h3>
-                <div class="categories-list">
-                    <div class="category-item" data-category="all">
-                        <span class="category-color" style="background: #667eea;"></span>
-                        Tous les événements
-                    </div>
-                    <div class="category-item" data-category="personal">
-                        <span class="category-color" style="background: #f093fb;"></span>
-                        Personnel
-                    </div>
-                    <div class="category-item" data-category="work">
-                        <span class="category-color" style="background: #f5576c;"></span>
-                        Travail
-                    </div>
-                    <div class="category-item" data-category="study">
-                        <span class="category-color" style="background: #4facfe;"></span>
-                        Études
-                    </div>
-                    <div class="category-item" data-category="health">
-                        <span class="category-color" style="background: #43e97b;"></span>
-                        Santé
-                    </div>
+            <div class="widget-content">
+                <div style="text-align: center; padding: 2rem; color: var(--gray);">
+                    <i class="fas fa-calendar" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <h3>Fonctionnalité calendrier</h3>
+                    <p>Le calendrier interactif sera disponible prochainement !</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="assets/js/app.js"></script>
-    <script src="assets/js/calendar.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
