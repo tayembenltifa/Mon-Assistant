@@ -3,58 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Assistant Personnel</title>
+    <title>Mon Assistant Personnel - Application de Productivité Gratuite</title>
+    <meta name="description" content="Application de productivité complète pour gérer vos tâches, notes, calendrier et objectifs. Organisez votre vie gratuitement avec Mon Assistant Personnel.">
+    <meta name="keywords" content="assistant personnel, productivité, gestion tâches, notes, calendrier, objectifs, organisation, application gratuite">
+    <meta name="author" content="Mon Assistant Personnel">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Navigation principale">
         <div class="nav-brand">
-            <i class="fas fa-robot"></i>
-            <span>Mon Assistant</span>
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            <span>Mon Assistant Personnel</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link active">
-                <i class="fas fa-home"></i> Dashboard
+            <a href="index.html" class="nav-link active" aria-current="page">
+                <i class="fas fa-home" aria-hidden="true"></i> Dashboard
             </a>
             <a href="tasks.html" class="nav-link">
-                <i class="fas fa-tasks"></i> Tâches
+                <i class="fas fa-tasks" aria-hidden="true"></i> Tâches
             </a>
             <a href="notes.html" class="nav-link">
-                <i class="fas fa-sticky-note"></i> Notes
+                <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
             </a>
             <a href="calendar.html" class="nav-link">
-                <i class="fas fa-calendar"></i> Calendrier
+                <i class="fas fa-calendar" aria-hidden="true"></i> Calendrier
             </a>
             <a href="goals.html" class="nav-link">
-                <i class="fas fa-bullseye"></i> Objectifs
+                <i class="fas fa-bullseye" aria-hidden="true"></i> Objectifs
             </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle">
-                <i class="fas fa-moon"></i>
+            <button id="themeToggle" aria-label="Changer le thème">
+                <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
         </div>
     </nav>
 
-    <!-- Header -->
-    <header class="dashboard-header">
+    <!-- En-tête principal -->
+    <header class="dashboard-header" role="banner">
         <div class="welcome-message">
             <h1>Bonjour, <span id="userName">Étudiant</span> ! 👋</h1>
             <p id="timeGreeting">Bonne journée</p>
         </div>
-        <div class="weather-widget">
-            <i class="fas fa-sun"></i>
+        <div class="weather-widget" aria-label="Météo actuelle">
+            <i class="fas fa-sun" aria-hidden="true"></i>
             <span>24°C - Ensoleillé</span>
         </div>
     </header>
 
-    <!-- Statistiques -->
-    <section class="quick-stats">
+    <!-- Section Statistiques -->
+    <section class="quick-stats" aria-label="Statistiques rapides">
         <div class="stat-card">
             <div class="stat-icon">
-                <i class="fas fa-tasks"></i>
+                <i class="fas fa-tasks" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
                 <h3 id="totalTasks">0</h3>
@@ -63,7 +66,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-icon">
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
                 <h3 id="completedTasks">0</h3>
@@ -72,7 +75,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-icon">
-                <i class="fas fa-sticky-note"></i>
+                <i class="fas fa-sticky-note" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
                 <h3 id="totalNotes">0</h3>
@@ -81,7 +84,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-icon">
-                <i class="fas fa-bullseye"></i>
+                <i class="fas fa-bullseye" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
                 <h3 id="activeGoals">0</h3>
@@ -91,81 +94,75 @@
     </section>
 
     <!-- Contenu Principal -->
-    <main class="dashboard-main">
+    <main class="dashboard-main" role="main">
         <div class="dashboard-grid">
-            <!-- Tâches Récentes -->
-            <div class="dashboard-widget">
+            <!-- Section Tâches Récentes -->
+            <section class="dashboard-widget" aria-labelledby="recent-tasks-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-clock"></i> Tâches Récentes</h2>
+                    <h2 id="recent-tasks-title"><i class="fas fa-clock" aria-hidden="true"></i> Tâches Récentes</h2>
                     <a href="tasks.html" class="view-all">Voir tout</a>
                 </div>
                 <div class="widget-content">
-                    <div id="recentTasks" class="task-list">
-                        <div class="task-item">
-                            <div class="task-content">
-                                <div class="task-title">Exemple de tâche</div>
-                                <div class="task-meta">Aujourd'hui • Moyenne</div>
-                            </div>
-                        </div>
+                    <div id="recentTasks" class="task-list" role="list">
+                        <!-- Les tâches seront chargées ici -->
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Notes Récentes -->
-            <div class="dashboard-widget">
+            <!-- Section Notes Récentes -->
+            <section class="dashboard-widget" aria-labelledby="recent-notes-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-sticky-note"></i> Notes Récentes</h2>
+                    <h2 id="recent-notes-title"><i class="fas fa-sticky-note" aria-hidden="true"></i> Notes Récentes</h2>
                     <a href="notes.html" class="view-all">Voir tout</a>
                 </div>
                 <div class="widget-content">
-                    <div id="recentNotes" class="notes-list">
-                        <div class="note-item">
-                            <div class="note-title">Exemple de note</div>
-                            <div class="note-preview">Ceci est un exemple de note...</div>
-                        </div>
+                    <div id="recentNotes" class="notes-list" role="list">
+                        <!-- Les notes seront chargées ici -->
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Aujourd'hui -->
-            <div class="dashboard-widget">
+            <!-- Section Aujourd'hui -->
+            <section class="dashboard-widget" aria-labelledby="today-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-calendar-day"></i> Aujourd'hui</h2>
+                    <h2 id="today-title"><i class="fas fa-calendar-day" aria-hidden="true"></i> Aujourd'hui</h2>
                     <span id="todayDate"></span>
                 </div>
                 <div class="widget-content">
-                    <div id="todayEvents" class="events-list">
-                        <div class="event-item">
-                            <div class="event-time">14:00</div>
-                            <div class="event-title">Exemple d'événement</div>
-                        </div>
+                    <div id="todayEvents" class="events-list" role="list">
+                        <!-- Les événements seront chargés ici -->
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Assistant IA -->
-            <div class="dashboard-widget full-width">
+            <!-- Section Assistant IA -->
+            <section class="dashboard-widget full-width" aria-labelledby="ai-assistant-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-robot"></i> Assistant IA</h2>
+                    <h2 id="ai-assistant-title"><i class="fas fa-robot" aria-hidden="true"></i> Assistant IA</h2>
                 </div>
                 <div class="widget-content">
                     <div class="ai-assistant">
-                        <div class="ai-messages" id="aiMessages">
-                            <div class="message assistant-message">
+                        <div class="ai-messages" id="aiMessages" role="log" aria-live="polite">
+                            <div class="message assistant-message" role="article">
                                 Bonjour ! Je suis ton assistant IA. Comment puis-je t'aider aujourd'hui ? 🤖
                             </div>
                         </div>
                         <div class="ai-input">
-                            <input type="text" id="aiInput" placeholder="Pose ta question...">
-                            <button onclick="sendMessage()">
-                                <i class="fas fa-paper-plane"></i> Envoyer
+                            <input type="text" id="aiInput" placeholder="Pose ta question..." aria-label="Message pour l'assistant IA">
+                            <button onclick="sendMessage()" aria-label="Envoyer le message">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i> Envoyer
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </main>
+
+    <!-- Pied de page -->
+    <footer class="footer" role="contentinfo">
+        <p>&copy; 2024 Mon Assistant Personnel. Application de productivité gratuite.</p>
+    </footer>
 
     <script src="app.js"></script>
 </body>
