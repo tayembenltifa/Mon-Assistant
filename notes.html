@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Personnelles 📓 - Mon Assistant</title>
+    <title>Notes - Mon Assistant</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <nav class="navbar">
@@ -15,144 +14,74 @@
             <span>Mon Assistant</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Accueil</a>
-            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
-            <a href="notes.html" class="nav-link active"><i class="fas fa-sticky-note"></i> Notes</a>
-            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
-            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="tasks.html" class="nav-link">
+                <i class="fas fa-tasks"></i> Tâches
+            </a>
+            <a href="notes.html" class="nav-link active">
+                <i class="fas fa-sticky-note"></i> Notes
+            </a>
+            <a href="calendar.html" class="nav-link">
+                <i class="fas fa-calendar"></i> Calendrier
+            </a>
+            <a href="goals.html" class="nav-link">
+                <i class="fas fa-bullseye"></i> Objectifs
+            </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+            <button id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
 
-    <main class="notes-main">
-        <div class="page-header">
-            <h1><i class="fas fa-sticky-note"></i> Notes Personnelles</h1>
-            <p>Capture tes idées, pensées et informations importantes</p>
+    <main class="dashboard-main">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-sticky-note"></i> Mes Notes</h1>
+            <p>Capture tes idées et pensées</p>
         </div>
 
-        <div class="notes-container">
-            <!-- Barre d'outils -->
-            <div class="notes-toolbar">
-                <button class="btn-primary" onclick="notesManager.createNewNote()">
-                    <i class="fas fa-plus"></i> Nouvelle Note
-                </button>
-                
-                <div class="notes-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="notesSearch" placeholder="Rechercher dans les notes...">
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-sticky-note"></i>
                 </div>
-
-                <div class="notes-filters">
-                    <select id="categoryFilter">
-                        <option value="all">Toutes les catégories</option>
-                        <option value="personal">Personnel</option>
-                        <option value="work">Travail</option>
-                        <option value="study">Études</option>
-                        <option value="ideas">Idées</option>
-                        <option value="projects">Projets</option>
-                    </select>
-                    
-                    <select id="sortFilter">
-                        <option value="newest">Plus récentes</option>
-                        <option value="oldest">Plus anciennes</option>
-                        <option value="title">Par titre</option>
-                    </select>
+                <div class="stat-info">
+                    <h3 id="notesTotal">0</h3>
+                    <p>Notes totales</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Éditeur de note -->
-            <div class="note-editor" id="noteEditor" style="display: none;">
-                <div class="editor-header">
-                    <input type="text" id="noteTitle" placeholder="Titre de la note" class="note-title-input">
-                    <div class="editor-actions">
-                        <button class="btn-success" onclick="notesManager.saveNote()">
-                            <i class="fas fa-save"></i> Sauvegarder
+        <div class="dashboard-grid">
+            <!-- Formulaire -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-plus"></i> Nouvelle Note</h2>
+                </div>
+                <div class="widget-content">
+                    <form id="noteForm">
+                        <div style="margin-bottom: 1rem;">
+                            <input type="text" id="noteTitle" placeholder="Titre de la note" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); margin-bottom: 1rem;">
+                            <textarea id="noteContent" placeholder="Contenu de la note..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); height: 150px; resize: vertical;"></textarea>
+                        </div>
+                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; width: 100%;">
+                            <i class="fas fa-save"></i> Sauvegarder la Note
                         </button>
-                        <button class="btn-secondary" onclick="notesManager.cancelEdit()">
-                            <i class="fas fa-times"></i> Annuler
-                        </button>
-                    </div>
-                </div>
-
-                <div class="editor-toolbar">
-                    <button onclick="notesManager.formatText('bold')"><i class="fas fa-bold"></i></button>
-                    <button onclick="notesManager.formatText('italic')"><i class="fas fa-italic"></i></button>
-                    <button onclick="notesManager.formatText('underline')"><i class="fas fa-underline"></i></button>
-                    <button onclick="notesManager.insertList('ul')"><i class="fas fa-list-ul"></i></button>
-                    <button onclick="notesManager.insertList('ol')"><i class="fas fa-list-ol"></i></button>
-                    <button onclick="notesManager.insertLink()"><i class="fas fa-link"></i></button>
-                    <button onclick="notesManager.insertImage()"><i class="fas fa-image"></i></button>
-                    
-                    <select onchange="notesManager.changeCategory(this.value)" id="editorCategory">
-                        <option value="personal">Personnel</option>
-                        <option value="work">Travail</option>
-                        <option value="study">Études</option>
-                        <option value="ideas">Idées</option>
-                        <option value="projects">Projets</option>
-                    </select>
-                </div>
-
-                <div class="editor-content">
-                    <textarea id="noteContent" placeholder="Commence à écrire ta note ici..."></textarea>
-                    <div class="editor-preview" id="notePreview"></div>
-                </div>
-
-                <div class="editor-tags">
-                    <input type="text" id="tagInput" placeholder="Ajouter un tag...">
-                    <button onclick="notesManager.addTag()"><i class="fas fa-tag"></i></button>
-                    <div class="tags-container" id="tagsContainer"></div>
+                    </form>
                 </div>
             </div>
 
-            <!-- Grille des notes -->
-            <div class="notes-grid" id="notesGrid">
-                <!-- Les notes seront chargées ici -->
-            </div>
-
-            <!-- Vue liste -->
-            <div class="notes-list-view" id="notesListView" style="display: none;">
-                <!-- Vue liste des notes -->
-            </div>
-
-            <!-- Statistiques -->
-            <div class="notes-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-sticky-note"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="totalNotesCount">0</h3>
-                        <p>Notes totales</p>
-                    </div>
+            <!-- Liste des notes -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-list"></i> Mes Notes</h2>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-folder"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="categoriesCount">0</h3>
-                        <p>Catégories</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-tags"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="tagsCount">0</h3>
-                        <p>Tags utilisés</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="recentNotesCount">0</h3>
-                        <p>Notes ce mois</p>
+                <div class="widget-content">
+                    <div id="notesList" class="notes-list">
+                        <!-- Les notes seront ajoutées ici -->
                     </div>
                 </div>
             </div>
@@ -160,6 +89,102 @@
     </main>
 
     <script src="app.js"></script>
-    <script src="notes.js"></script>
+    <script>
+        class NotesManager {
+            constructor() {
+                this.notes = JSON.parse(localStorage.getItem('notes')) || [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderNotes();
+                this.updateStats();
+            }
+
+            setupEventListeners() {
+                document.getElementById('noteForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addNote();
+                });
+            }
+
+            addNote() {
+                const titleInput = document.getElementById('noteTitle');
+                const contentInput = document.getElementById('noteContent');
+                const title = titleInput.value.trim();
+                const content = contentInput.value.trim();
+
+                if (title && content) {
+                    const note = {
+                        id: Date.now(),
+                        title: title,
+                        content: content,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    this.notes.push(note);
+                    this.saveNotes();
+                    this.renderNotes();
+                    this.updateStats();
+                    
+                    titleInput.value = '';
+                    contentInput.value = '';
+                    
+                    // Mettre à jour le dashboard principal
+                    if (window.app) {
+                        window.app.updateDashboard();
+                    }
+                }
+            }
+
+            deleteNote(id) {
+                if (confirm('Supprimer cette note ?')) {
+                    this.notes = this.notes.filter(note => note.id !== id);
+                    this.saveNotes();
+                    this.renderNotes();
+                    this.updateStats();
+                    
+                    if (window.app) {
+                        window.app.updateDashboard();
+                    }
+                }
+            }
+
+            renderNotes() {
+                const container = document.getElementById('notesList');
+                
+                if (this.notes.length === 0) {
+                    container.innerHTML = '<div class="note-item">Aucune note pour le moment</div>';
+                    return;
+                }
+
+                container.innerHTML = this.notes.map(note => `
+                    <div class="note-item">
+                        <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
+                            <div style="flex: 1;">
+                                <div class="note-title">${note.title}</div>
+                                <div class="note-preview">${note.content}</div>
+                                <div class="task-meta">${new Date(note.createdAt).toLocaleDateString('fr-FR')}</div>
+                            </div>
+                            <button onclick="notesManager.deleteNote(${note.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateStats() {
+                document.getElementById('notesTotal').textContent = this.notes.length;
+            }
+
+            saveNotes() {
+                localStorage.setItem('notes', JSON.stringify(this.notes));
+            }
+        }
+
+        const notesManager = new NotesManager();
+    </script>
 </body>
 </html>
