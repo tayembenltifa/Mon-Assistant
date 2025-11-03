@@ -3,105 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tâches - Mon Assistant</title>
+    <title>Gestion des Tâches - Mon Assistant Personnel</title>
+    <meta name="description" content="Gestionnaire de tâches complet. Organisez, priorisez et suivez vos tâches efficacement avec Mon Assistant Personnel.">
+    <meta name="keywords" content="gestion tâches, to-do list, organisation, productivité, priorités, tâches quotidiennes">
+    <meta name="author" content="Mon Assistant Personnel">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Navigation principale">
         <div class="nav-brand">
-            <i class="fas fa-robot"></i>
-            <span>Mon Assistant</span>
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            <span>Mon Assistant Personnel</span>
         </div>
         <div class="nav-links">
             <a href="index.html" class="nav-link">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home" aria-hidden="true"></i> Dashboard
             </a>
-            <a href="tasks.html" class="nav-link active">
-                <i class="fas fa-tasks"></i> Tâches
+            <a href="tasks.html" class="nav-link active" aria-current="page">
+                <i class="fas fa-tasks" aria-hidden="true"></i> Tâches
             </a>
             <a href="notes.html" class="nav-link">
-                <i class="fas fa-sticky-note"></i> Notes
+                <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
             </a>
             <a href="calendar.html" class="nav-link">
-                <i class="fas fa-calendar"></i> Calendrier
+                <i class="fas fa-calendar" aria-hidden="true"></i> Calendrier
             </a>
             <a href="goals.html" class="nav-link">
-                <i class="fas fa-bullseye"></i> Objectifs
+                <i class="fas fa-bullseye" aria-hidden="true"></i> Objectifs
             </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle">
-                <i class="fas fa-moon"></i>
+            <button id="themeToggle" aria-label="Changer le thème">
+                <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
         </div>
     </nav>
 
-    <main class="dashboard-main">
-        <div class="dashboard-header">
-            <h1><i class="fas fa-tasks"></i> Mes Tâches</h1>
-            <p>Organise et priorise tes tâches</p>
-        </div>
+    <main class="dashboard-main" role="main">
+        <header class="dashboard-header">
+            <h1><i class="fas fa-tasks" aria-hidden="true"></i> Gestion des Tâches</h1>
+            <p>Organisez et priorisez vos tâches efficacement</p>
+        </header>
 
-        <div class="quick-stats">
+        <!-- Statistiques des Tâches -->
+        <section class="quick-stats" aria-label="Statistiques des tâches">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="fas fa-list"></i>
+                    <i class="fas fa-list" aria-hidden="true"></i>
                 </div>
                 <div class="stat-info">
                     <h3 id="tasksTotal">0</h3>
-                    <p>Total</p>
+                    <p>Total des tâches</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-check" aria-hidden="true"></i>
                 </div>
                 <div class="stat-info">
                     <h3 id="tasksCompleted">0</h3>
-                    <p>Terminées</p>
+                    <p>Tâches terminées</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
+                    <i class="fas fa-clock" aria-hidden="true"></i>
                 </div>
                 <div class="stat-info">
                     <h3 id="tasksPending">0</h3>
                     <p>En attente</p>
                 </div>
             </div>
-        </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-fire" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="tasksUrgent">0</h3>
+                    <p>Urgentes</p>
+                </div>
+            </div>
+        </section>
 
         <div class="dashboard-grid">
-            <!-- Formulaire -->
-            <div class="dashboard-widget">
+            <!-- Formulaire d'ajout de tâche -->
+            <section class="dashboard-widget" aria-labelledby="add-task-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-plus"></i> Nouvelle Tâche</h2>
+                    <h2 id="add-task-title"><i class="fas fa-plus" aria-hidden="true"></i> Nouvelle Tâche</h2>
                 </div>
                 <div class="widget-content">
-                    <form id="taskForm">
-                        <div style="margin-bottom: 1rem;">
-                            <input type="text" id="taskTitle" placeholder="Titre de la tâche" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
+                    <form id="taskForm" role="form" aria-labelledby="add-task-title">
+                        <div class="form-group">
+                            <label for="taskTitle" class="sr-only">Titre de la tâche</label>
+                            <input type="text" id="taskTitle" placeholder="Que devez-vous faire ?" required aria-required="true">
                         </div>
-                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; width: 100%;">
-                            <i class="fas fa-plus"></i> Ajouter la Tâche
+                        <div class="form-group">
+                            <label for="taskPriority">Priorité</label>
+                            <select id="taskPriority" aria-label="Sélectionner la priorité de la tâche">
+                                <option value="low">🟢 Faible</option>
+                                <option value="medium">🟡 Moyenne</option>
+                                <option value="high">🔴 Haute</option>
+                                <option value="urgent">⚡ Urgente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskCategory">Catégorie</label>
+                            <select id="taskCategory" aria-label="Sélectionner la catégorie de la tâche">
+                                <option value="work">💼 Travail</option>
+                                <option value="study">📚 Études</option>
+                                <option value="personal">👤 Personnel</option>
+                                <option value="health">🏃 Santé</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-plus" aria-hidden="true"></i> Ajouter la Tâche
                         </button>
                     </form>
                 </div>
-            </div>
+            </section>
 
             <!-- Liste des tâches -->
-            <div class="dashboard-widget">
+            <section class="dashboard-widget" aria-labelledby="tasks-list-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-list"></i> Liste des Tâches</h2>
+                    <h2 id="tasks-list-title"><i class="fas fa-list" aria-hidden="true"></i> Liste des Tâches</h2>
+                    <span class="tasks-count" id="tasksCount">0 tâches</span>
                 </div>
                 <div class="widget-content">
-                    <div id="tasksList" class="task-list">
-                        <!-- Les tâches seront ajoutées ici -->
+                    <div class="tasks-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input type="text" id="tasksSearch" placeholder="Rechercher une tâche..." aria-label="Rechercher dans les tâches">
+                        </div>
+                        <select id="tasksFilter" aria-label="Filtrer les tâches">
+                            <option value="all">Toutes les tâches</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Terminées</option>
+                            <option value="urgent">Urgentes</option>
+                        </select>
+                    </div>
+                    <div id="tasksList" class="task-list" role="list" aria-label="Liste des tâches">
+                        <!-- Les tâches seront chargées ici -->
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </main>
 
@@ -124,30 +169,53 @@
                     e.preventDefault();
                     this.addTask();
                 });
+
+                document.getElementById('tasksSearch').addEventListener('input', (e) => {
+                    this.renderTasks();
+                });
+
+                document.getElementById('tasksFilter').addEventListener('change', (e) => {
+                    this.renderTasks();
+                });
             }
 
             addTask() {
-                const input = document.getElementById('taskTitle');
-                const title = input.value.trim();
+                const titleInput = document.getElementById('taskTitle');
+                const priorityInput = document.getElementById('taskPriority');
+                const categoryInput = document.getElementById('taskCategory');
+                
+                const title = titleInput.value.trim();
+                const priority = priorityInput.value;
+                const category = categoryInput.value;
 
                 if (title) {
                     const task = {
                         id: Date.now(),
                         title: title,
+                        priority: priority,
+                        category: category,
                         completed: false,
-                        createdAt: new Date().toISOString()
+                        createdAt: new Date().toISOString(),
+                        dueDate: null
                     };
 
                     this.tasks.push(task);
                     this.saveTasks();
                     this.renderTasks();
                     this.updateStats();
-                    input.value = '';
+                    
+                    // Réinitialiser le formulaire
+                    titleInput.value = '';
+                    priorityInput.value = 'medium';
+                    categoryInput.value = 'work';
                     
                     // Mettre à jour le dashboard principal
                     if (window.app) {
                         window.app.updateDashboard();
                     }
+
+                    // Notification visuelle
+                    this.showNotification('Tâche ajoutée avec succès !', 'success');
                 }
             }
 
@@ -162,10 +230,14 @@
                 if (window.app) {
                     window.app.updateDashboard();
                 }
+
+                const task = this.tasks.find(t => t.id === id);
+                const message = task.completed ? 'Tâche marquée comme terminée !' : 'Tâche réactivée';
+                this.showNotification(message, 'success');
             }
 
             deleteTask(id) {
-                if (confirm('Supprimer cette tâche ?')) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
                     this.tasks = this.tasks.filter(task => task.id !== id);
                     this.saveTasks();
                     this.renderTasks();
@@ -174,39 +246,135 @@
                     if (window.app) {
                         window.app.updateDashboard();
                     }
+
+                    this.showNotification('Tâche supprimée', 'info');
                 }
+            }
+
+            getFilteredTasks() {
+                const searchTerm = document.getElementById('tasksSearch').value.toLowerCase();
+                const filter = document.getElementById('tasksFilter').value;
+
+                return this.tasks.filter(task => {
+                    // Filtre recherche
+                    if (searchTerm && !task.title.toLowerCase().includes(searchTerm)) {
+                        return false;
+                    }
+
+                    // Filtre statut
+                    if (filter === 'pending' && task.completed) return false;
+                    if (filter === 'completed' && !task.completed) return false;
+                    if (filter === 'urgent' && task.priority !== 'urgent') return false;
+
+                    return true;
+                });
             }
 
             renderTasks() {
                 const container = document.getElementById('tasksList');
+                const filteredTasks = this.getFilteredTasks();
                 
-                if (this.tasks.length === 0) {
-                    container.innerHTML = '<div class="task-item">Aucune tâche pour le moment</div>';
+                if (filteredTasks.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" role="status">
+                            <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+                            <h3>Aucune tâche trouvée</h3>
+                            <p>${this.tasks.length === 0 ? 'Commencez par ajouter votre première tâche !' : 'Aucune tâche ne correspond à votre recherche'}</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                container.innerHTML = this.tasks.map(task => `
-                    <div class="task-item ${task.completed ? 'completed' : ''}">
-                        <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
-                            <div onclick="taskManager.toggleTask(${task.id})" style="cursor: pointer; padding: 0.5rem;">
-                                <i class="fas fa-${task.completed ? 'check-circle' : 'circle'}" style="color: ${task.completed ? 'var(--success)' : 'var(--gray)'}"></i>
+                container.innerHTML = filteredTasks.map(task => `
+                    <div class="task-item ${task.completed ? 'completed' : ''} priority-${task.priority}" role="listitem">
+                        <div class="task-content">
+                            <div class="task-header">
+                                <button onclick="taskManager.toggleTask(${task.id})" class="task-checkbox ${task.completed ? 'checked' : ''}" aria-label="${task.completed ? 'Marquer comme non terminée' : 'Marquer comme terminée'}">
+                                    <i class="fas fa-${task.completed ? 'check-circle' : 'circle'}" aria-hidden="true"></i>
+                                </button>
+                                <div class="task-info">
+                                    <div class="task-title">${task.title}</div>
+                                    <div class="task-meta">
+                                        <span class="task-priority ${task.priority}">
+                                            ${this.getPriorityLabel(task.priority)}
+                                        </span>
+                                        <span class="task-category ${task.category}">
+                                            ${this.getCategoryLabel(task.category)}
+                                        </span>
+                                        <span class="task-date">
+                                            ${new Date(task.createdAt).toLocaleDateString('fr-FR')}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div style="flex: 1;">
-                                <div class="task-title">${task.title}</div>
-                                <div class="task-meta">${new Date(task.createdAt).toLocaleDateString('fr-FR')}</div>
+                            <div class="task-actions">
+                                <button onclick="taskManager.deleteTask(${task.id})" class="btn-icon btn-danger" aria-label="Supprimer la tâche">
+                                    <i class="fas fa-trash" aria-hidden="true"></i>
+                                </button>
                             </div>
-                            <button onclick="taskManager.deleteTask(${task.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem;">
-                                <i class="fas fa-trash"></i>
-                            </button>
                         </div>
                     </div>
                 `).join('');
             }
 
             updateStats() {
-                document.getElementById('tasksTotal').textContent = this.tasks.length;
-                document.getElementById('tasksCompleted').textContent = this.tasks.filter(t => t.completed).length;
-                document.getElementById('tasksPending').textContent = this.tasks.filter(t => !t.completed).length;
+                const total = this.tasks.length;
+                const completed = this.tasks.filter(t => t.completed).length;
+                const pending = total - completed;
+                const urgent = this.tasks.filter(t => t.priority === 'urgent' && !t.completed).length;
+
+                document.getElementById('tasksTotal').textContent = total;
+                document.getElementById('tasksCompleted').textContent = completed;
+                document.getElementById('tasksPending').textContent = pending;
+                document.getElementById('tasksUrgent').textContent = urgent;
+                document.getElementById('tasksCount').textContent = `${total} tâche${total !== 1 ? 's' : ''}`;
+            }
+
+            getPriorityLabel(priority) {
+                const labels = {
+                    low: '🟢 Faible',
+                    medium: '🟡 Moyenne',
+                    high: '🔴 Haute',
+                    urgent: '⚡ Urgente'
+                };
+                return labels[priority] || 'Moyenne';
+            }
+
+            getCategoryLabel(category) {
+                const labels = {
+                    work: '💼 Travail',
+                    study: '📚 Études',
+                    personal: '👤 Personnel',
+                    health: '🏃 Santé'
+                };
+                return labels[category] || 'Autre';
+            }
+
+            showNotification(message, type = 'info') {
+                // Créer une notification simple
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                notification.setAttribute('role', 'alert');
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                `;
+
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
             }
 
             saveTasks() {
@@ -214,7 +382,152 @@
             }
         }
 
+        // Initialisation
         const taskManager = new TaskManager();
+
+        // Styles supplémentaires pour les tâches
+        const style = document.createElement('style');
+        style.textContent = `
+            .tasks-controls {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .search-box {
+                position: relative;
+                flex: 1;
+                min-width: 200px;
+            }
+            
+            .search-box i {
+                position: absolute;
+                left: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--gray);
+            }
+            
+            .search-box input {
+                width: 100%;
+                padding: 0.75rem 1rem 0.75rem 2.5rem;
+                border: 1px solid var(--gray-light);
+                border-radius: var(--radius);
+            }
+            
+            .tasks-count {
+                color: var(--gray);
+                font-size: 0.9rem;
+            }
+            
+            .task-header {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+                flex: 1;
+            }
+            
+            .task-checkbox {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0.25rem;
+                border-radius: 50%;
+                transition: var(--transition);
+            }
+            
+            .task-checkbox:hover {
+                background: rgba(0,0,0,0.1);
+            }
+            
+            .task-info {
+                flex: 1;
+            }
+            
+            .task-meta {
+                display: flex;
+                gap: 1rem;
+                margin-top: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .task-priority, .task-category, .task-date {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 12px;
+                background: var(--light);
+            }
+            
+            .priority-urgent { background: #fee2e2; color: #dc2626; }
+            .priority-high { background: #ffedd5; color: #ea580c; }
+            .priority-medium { background: #fef3c7; color: #d97706; }
+            .priority-low { background: #ecfdf5; color: #059669; }
+            
+            .task-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 1rem;
+                width: 100%;
+            }
+            
+            .task-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+            
+            .btn-icon {
+                background: none;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: var(--transition);
+            }
+            
+            .btn-icon:hover {
+                background: var(--light);
+            }
+            
+            .btn-danger { color: var(--danger); }
+            
+            .empty-state {
+                text-align: center;
+                padding: 2rem;
+                color: var(--gray);
+            }
+            
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                opacity: 0.5;
+            }
+            
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+            
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
