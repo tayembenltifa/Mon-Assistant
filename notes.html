@@ -3,88 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes - Mon Assistant</title>
+    <title>Gestion des Notes - Mon Assistant Personnel</title>
+    <meta name="description" content="Prenez et organisez vos notes efficacement. Application de prise de notes complète avec catégories et recherche.">
+    <meta name="keywords" content="notes, prise de notes, organisation, mémo, idées, pense-bête">
+    <meta name="author" content="Mon Assistant Personnel">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .notes-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+        }
+        
+        .notes-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .note-editor {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .editor-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .note-title-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .note-content-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .note-card {
+            background: var(--lighter);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .note-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .note-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .note-card-content {
+            flex: 1;
+            color: var(--gray);
+            line-height: 1.5;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+        
+        .note-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .note-category {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            background: var(--light);
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Navigation principale">
         <div class="nav-brand">
-            <i class="fas fa-robot"></i>
-            <span>Mon Assistant</span>
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            <span>Mon Assistant Personnel</span>
         </div>
         <div class="nav-links">
             <a href="index.html" class="nav-link">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home" aria-hidden="true"></i> Dashboard
             </a>
             <a href="tasks.html" class="nav-link">
-                <i class="fas fa-tasks"></i> Tâches
+                <i class="fas fa-tasks" aria-hidden="true"></i> Tâches
             </a>
-            <a href="notes.html" class="nav-link active">
-                <i class="fas fa-sticky-note"></i> Notes
+            <a href="notes.html" class="nav-link active" aria-current="page">
+                <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
             </a>
             <a href="calendar.html" class="nav-link">
-                <i class="fas fa-calendar"></i> Calendrier
+                <i class="fas fa-calendar" aria-hidden="true"></i> Calendrier
             </a>
             <a href="goals.html" class="nav-link">
-                <i class="fas fa-bullseye"></i> Objectifs
+                <i class="fas fa-bullseye" aria-hidden="true"></i> Objectifs
             </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle">
-                <i class="fas fa-moon"></i>
+            <button id="themeToggle" aria-label="Changer le thème">
+                <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
         </div>
     </nav>
 
-    <main class="dashboard-main">
-        <div class="dashboard-header">
-            <h1><i class="fas fa-sticky-note"></i> Mes Notes</h1>
-            <p>Capture tes idées et pensées</p>
-        </div>
+    <main class="dashboard-main" role="main">
+        <header class="dashboard-header">
+            <h1><i class="fas fa-sticky-note" aria-hidden="true"></i> Gestion des Notes</h1>
+            <p>Capturez et organisez vos idées efficacement</p>
+        </header>
 
-        <div class="quick-stats">
+        <!-- Statistiques des Notes -->
+        <section class="quick-stats" aria-label="Statistiques des notes">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="fas fa-sticky-note"></i>
+                    <i class="fas fa-sticky-note" aria-hidden="true"></i>
                 </div>
                 <div class="stat-info">
                     <h3 id="notesTotal">0</h3>
                     <p>Notes totales</p>
                 </div>
             </div>
-        </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-folder" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="notesCategories">0</h3>
+                    <p>Catégories</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="notesThisMonth">0</h3>
+                    <p>Ce mois-ci</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock" aria-hidden="true"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="notesRecent">0</h3>
+                    <p>Récentes</p>
+                </div>
+            </div>
+        </section>
 
         <div class="dashboard-grid">
-            <!-- Formulaire -->
-            <div class="dashboard-widget">
+            <!-- Éditeur de Notes -->
+            <section class="dashboard-widget" aria-labelledby="editor-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-plus"></i> Nouvelle Note</h2>
+                    <h2 id="editor-title"><i class="fas fa-edit" aria-hidden="true"></i> Éditeur de Notes</h2>
                 </div>
                 <div class="widget-content">
-                    <form id="noteForm">
-                        <div style="margin-bottom: 1rem;">
-                            <input type="text" id="noteTitle" placeholder="Titre de la note" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); margin-bottom: 1rem;">
-                            <textarea id="noteContent" placeholder="Contenu de la note..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius); height: 150px; resize: vertical;"></textarea>
+                    <div class="note-editor">
+                        <div class="editor-header">
+                            <input type="text" id="noteTitle" placeholder="Titre de la note" class="note-title-input" aria-label="Titre de la note">
+                            <select id="noteCategory" aria-label="Catégorie de la note">
+                                <option value="personal">👤 Personnel</option>
+                                <option value="work">💼 Travail</option>
+                                <option value="study">📚 Études</option>
+                                <option value="ideas">💡 Idées</option>
+                                <option value="projects">🚀 Projets</option>
+                            </select>
                         </div>
-                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; width: 100%;">
-                            <i class="fas fa-save"></i> Sauvegarder la Note
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Liste des notes -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h2><i class="fas fa-list"></i> Mes Notes</h2>
-                </div>
-                <div class="widget-content">
-                    <div id="notesList" class="notes-list">
-                        <!-- Les notes seront ajoutées ici -->
+                        <textarea id="noteContent" placeholder="Commencez à écrire votre note ici..." class="note-content-input" aria-label="Contenu de la note"></textarea>
+                        <div class="editor-actions">
+                            <button type="button" id="saveNote" class="btn btn-primary">
+                                <i class="fas fa-save" aria-hidden="true"></i> Sauvegarder
+                            </button>
+                            <button type="button" id="clearNote" class="btn btn-secondary">
+                                <i class="fas fa-eraser" aria-hidden="true"></i> Effacer
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Liste des Notes -->
+            <section class="dashboard-widget full-width" aria-labelledby="notes-list-title">
+                <div class="widget-header">
+                    <h2 id="notes-list-title"><i class="fas fa-list" aria-hidden="true"></i> Mes Notes</h2>
+                    <span class="notes-count" id="notesCount">0 notes</span>
+                </div>
+                <div class="widget-content">
+                    <div class="notes-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input type="text" id="notesSearch" placeholder="Rechercher dans les notes..." aria-label="Rechercher dans les notes">
+                        </div>
+                        <select id="notesFilter" aria-label="Filtrer les notes par catégorie">
+                            <option value="all">Toutes les catégories</option>
+                            <option value="personal">Personnel</option>
+                            <option value="work">Travail</option>
+                            <option value="study">Études</option>
+                            <option value="ideas">Idées</option>
+                            <option value="projects">Projets</option>
+                        </select>
+                        <select id="notesSort" aria-label="Trier les notes">
+                            <option value="newest">Plus récentes</option>
+                            <option value="oldest">Plus anciennes</option>
+                            <option value="title">Par titre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="notes-grid" id="notesList" role="list" aria-label="Liste des notes">
+                        <!-- Les notes seront chargées ici -->
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -93,6 +386,7 @@
         class NotesManager {
             constructor() {
                 this.notes = JSON.parse(localStorage.getItem('notes')) || [];
+                this.currentNote = null;
                 this.init();
             }
 
@@ -103,44 +397,110 @@
             }
 
             setupEventListeners() {
-                document.getElementById('noteForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.addNote();
+                document.getElementById('saveNote').addEventListener('click', () => {
+                    this.saveNote();
+                });
+
+                document.getElementById('clearNote').addEventListener('click', () => {
+                    this.clearEditor();
+                });
+
+                document.getElementById('notesSearch').addEventListener('input', () => {
+                    this.renderNotes();
+                });
+
+                document.getElementById('notesFilter').addEventListener('change', () => {
+                    this.renderNotes();
+                });
+
+                document.getElementById('notesSort').addEventListener('change', () => {
+                    this.renderNotes();
+                });
+
+                // Sauvegarde automatique
+                document.getElementById('noteContent').addEventListener('input', () => {
+                    if (this.currentNote) {
+                        this.autoSave();
+                    }
                 });
             }
 
-            addNote() {
-                const titleInput = document.getElementById('noteTitle');
-                const contentInput = document.getElementById('noteContent');
-                const title = titleInput.value.trim();
-                const content = contentInput.value.trim();
+            saveNote() {
+                const title = document.getElementById('noteTitle').value.trim();
+                const content = document.getElementById('noteContent').value.trim();
+                const category = document.getElementById('noteCategory').value;
 
-                if (title && content) {
-                    const note = {
+                if (!title || !content) {
+                    this.showNotification('Veuillez remplir le titre et le contenu', 'error');
+                    return;
+                }
+
+                const noteData = {
+                    title,
+                    content,
+                    category,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (this.currentNote) {
+                    // Mettre à jour la note existante
+                    Object.assign(this.currentNote, noteData);
+                    this.showNotification('Note mise à jour !', 'success');
+                } else {
+                    // Créer une nouvelle note
+                    const newNote = {
                         id: Date.now(),
-                        title: title,
-                        content: content,
-                        createdAt: new Date().toISOString()
+                        createdAt: new Date().toISOString(),
+                        ...noteData
                     };
+                    this.notes.push(newNote);
+                    this.showNotification('Note créée !', 'success');
+                }
 
-                    this.notes.push(note);
-                    this.saveNotes();
-                    this.renderNotes();
-                    this.updateStats();
-                    
-                    titleInput.value = '';
-                    contentInput.value = '';
-                    
-                    // Mettre à jour le dashboard principal
-                    if (window.app) {
-                        window.app.updateDashboard();
-                    }
+                this.saveNotes();
+                this.clearEditor();
+                this.renderNotes();
+                this.updateStats();
+                
+                // Mettre à jour le dashboard principal
+                if (window.app) {
+                    window.app.updateDashboard();
                 }
             }
 
-            deleteNote(id) {
-                if (confirm('Supprimer cette note ?')) {
-                    this.notes = this.notes.filter(note => note.id !== id);
+            autoSave() {
+                clearTimeout(this.autoSaveTimeout);
+                this.autoSaveTimeout = setTimeout(() => {
+                    if (this.currentNote) {
+                        this.saveNote();
+                    }
+                }, 2000);
+            }
+
+            clearEditor() {
+                this.currentNote = null;
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteContent').value = '';
+                document.getElementById('noteCategory').value = 'personal';
+            }
+
+            editNote(noteId) {
+                const note = this.notes.find(n => n.id === noteId);
+                if (note) {
+                    this.currentNote = note;
+                    document.getElementById('noteTitle').value = note.title;
+                    document.getElementById('noteContent').value = note.content;
+                    document.getElementById('noteCategory').value = note.category;
+                    
+                    // Scroll vers l'éditeur
+                    document.getElementById('noteTitle').scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('noteTitle').focus();
+                }
+            }
+
+            deleteNote(noteId) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) {
+                    this.notes = this.notes.filter(note => note.id !== noteId);
                     this.saveNotes();
                     this.renderNotes();
                     this.updateStats();
@@ -148,35 +508,141 @@
                     if (window.app) {
                         window.app.updateDashboard();
                     }
+
+                    this.showNotification('Note supprimée', 'info');
                 }
+            }
+
+            getFilteredNotes() {
+                const searchTerm = document.getElementById('notesSearch').value.toLowerCase();
+                const categoryFilter = document.getElementById('notesFilter').value;
+                const sortBy = document.getElementById('notesSort').value;
+
+                let filtered = this.notes.filter(note => {
+                    // Filtre recherche
+                    if (searchTerm && !note.title.toLowerCase().includes(searchTerm) && 
+                        !note.content.toLowerCase().includes(searchTerm)) {
+                        return false;
+                    }
+
+                    // Filtre catégorie
+                    if (categoryFilter !== 'all' && note.category !== categoryFilter) {
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                // Tri
+                filtered.sort((a, b) => {
+                    switch (sortBy) {
+                        case 'newest':
+                            return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+                        case 'oldest':
+                            return new Date(a.updatedAt || a.createdAt) - new Date(b.updatedAt || b.createdAt);
+                        case 'title':
+                            return a.title.localeCompare(b.title);
+                        default:
+                            return 0;
+                    }
+                });
+
+                return filtered;
             }
 
             renderNotes() {
                 const container = document.getElementById('notesList');
-                
-                if (this.notes.length === 0) {
-                    container.innerHTML = '<div class="note-item">Aucune note pour le moment</div>';
+                const notes = this.getFilteredNotes();
+
+                if (notes.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" role="status">
+                            <i class="fas fa-sticky-note" aria-hidden="true"></i>
+                            <h3>Aucune note trouvée</h3>
+                            <p>${this.notes.length === 0 ? 'Commencez par créer votre première note !' : 'Aucune note ne correspond à votre recherche'}</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                container.innerHTML = this.notes.map(note => `
-                    <div class="note-item">
-                        <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
-                            <div style="flex: 1;">
-                                <div class="note-title">${note.title}</div>
-                                <div class="note-preview">${note.content}</div>
-                                <div class="task-meta">${new Date(note.createdAt).toLocaleDateString('fr-FR')}</div>
+                container.innerHTML = notes.map(note => `
+                    <div class="note-card" onclick="notesManager.editNote(${note.id})" role="listitem">
+                        <div class="note-card-header">
+                            <div>
+                                <div class="note-card-title">${note.title}</div>
                             </div>
-                            <button onclick="notesManager.deleteNote(${note.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem;">
-                                <i class="fas fa-trash"></i>
+                            <button onclick="event.stopPropagation(); notesManager.deleteNote(${note.id})" class="btn-icon" aria-label="Supprimer la note">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
                             </button>
+                        </div>
+                        <div class="note-card-content">${note.content}</div>
+                        <div class="note-card-meta">
+                            <span class="note-category">${this.getCategoryLabel(note.category)}</span>
+                            <span>${new Date(note.updatedAt || note.createdAt).toLocaleDateString('fr-FR')}</span>
                         </div>
                     </div>
                 `).join('');
             }
 
             updateStats() {
-                document.getElementById('notesTotal').textContent = this.notes.length;
+                const total = this.notes.length;
+                const categories = new Set(this.notes.map(note => note.category)).size;
+                
+                const thisMonth = new Date().getMonth();
+                const thisMonthNotes = this.notes.filter(note => {
+                    const noteDate = new Date(note.createdAt);
+                    return noteDate.getMonth() === thisMonth;
+                }).length;
+
+                const recentNotes = this.notes.filter(note => {
+                    const noteDate = new Date(note.createdAt);
+                    const weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    return noteDate > weekAgo;
+                }).length;
+
+                document.getElementById('notesTotal').textContent = total;
+                document.getElementById('notesCategories').textContent = categories;
+                document.getElementById('notesThisMonth').textContent = thisMonthNotes;
+                document.getElementById('notesRecent').textContent = recentNotes;
+                document.getElementById('notesCount').textContent = `${total} note${total !== 1 ? 's' : ''}`;
+            }
+
+            getCategoryLabel(category) {
+                const labels = {
+                    personal: '👤 Personnel',
+                    work: '💼 Travail',
+                    study: '📚 Études',
+                    ideas: '💡 Idées',
+                    projects: '🚀 Projets'
+                };
+                return labels[category] || 'Autre';
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                notification.setAttribute('role', 'alert');
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                `;
+
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
             }
 
             saveNotes() {
@@ -184,7 +650,39 @@
             }
         }
 
+        // Initialisation
         const notesManager = new NotesManager();
+
+        // Styles pour les boutons icônes
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn-icon {
+                background: none;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: var(--transition);
+                color: var(--gray);
+            }
+            
+            .btn-icon:hover {
+                background: var(--light);
+                color: var(--danger);
+            }
+            
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
