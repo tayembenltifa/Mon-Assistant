@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Assistant 🌟 - Accueil</title>
+    <title>Mon Assistant Personnel</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="manifest" href="manifest.json">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -17,15 +15,26 @@
             <span>Mon Assistant</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Accueil</a>
-            <a href="tasks.html" class="nav-link"><i class="fas fa-tasks"></i> Tâches</a>
-            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
-            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
-            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+            <a href="index.html" class="nav-link active">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="tasks.html" class="nav-link">
+                <i class="fas fa-tasks"></i> Tâches
+            </a>
+            <a href="notes.html" class="nav-link">
+                <i class="fas fa-sticky-note"></i> Notes
+            </a>
+            <a href="calendar.html" class="nav-link">
+                <i class="fas fa-calendar"></i> Calendrier
+            </a>
+            <a href="goals.html" class="nav-link">
+                <i class="fas fa-bullseye"></i> Objectifs
+            </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+            <button id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
 
@@ -33,15 +42,15 @@
     <header class="dashboard-header">
         <div class="welcome-message">
             <h1>Bonjour, <span id="userName">Étudiant</span> ! 👋</h1>
-            <p id="timeGreeting"></p>
+            <p id="timeGreeting">Bonne journée</p>
         </div>
-        <div class="weather-widget" id="weatherWidget">
+        <div class="weather-widget">
             <i class="fas fa-sun"></i>
-            <span>Chargement météo...</span>
+            <span>24°C - Ensoleillé</span>
         </div>
     </header>
 
-    <!-- Statistiques Rapides -->
+    <!-- Statistiques -->
     <section class="quick-stats">
         <div class="stat-card">
             <div class="stat-icon">
@@ -91,7 +100,14 @@
                     <a href="tasks.html" class="view-all">Voir tout</a>
                 </div>
                 <div class="widget-content">
-                    <div id="recentTasks" class="task-list"></div>
+                    <div id="recentTasks" class="task-list">
+                        <div class="task-item">
+                            <div class="task-content">
+                                <div class="task-title">Exemple de tâche</div>
+                                <div class="task-meta">Aujourd'hui • Moyenne</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -102,29 +118,27 @@
                     <a href="notes.html" class="view-all">Voir tout</a>
                 </div>
                 <div class="widget-content">
-                    <div id="recentNotes" class="notes-list"></div>
+                    <div id="recentNotes" class="notes-list">
+                        <div class="note-item">
+                            <div class="note-title">Exemple de note</div>
+                            <div class="note-preview">Ceci est un exemple de note...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Calendrier du jour -->
+            <!-- Aujourd'hui -->
             <div class="dashboard-widget">
                 <div class="widget-header">
                     <h2><i class="fas fa-calendar-day"></i> Aujourd'hui</h2>
                     <span id="todayDate"></span>
                 </div>
                 <div class="widget-content">
-                    <div id="todayEvents" class="events-list"></div>
-                </div>
-            </div>
-
-            <!-- Progression des objectifs -->
-            <div class="dashboard-widget">
-                <div class="widget-header">
-                    <h2><i class="fas fa-chart-line"></i> Progression</h2>
-                </div>
-                <div class="widget-content">
-                    <div class="progress-chart" id="goalsProgress">
-                        <canvas id="progressChart"></canvas>
+                    <div id="todayEvents" class="events-list">
+                        <div class="event-item">
+                            <div class="event-time">14:00</div>
+                            <div class="event-title">Exemple d'événement</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,12 +150,15 @@
                 </div>
                 <div class="widget-content">
                     <div class="ai-assistant">
-                        <div class="ai-messages" id="aiMessages"></div>
-                        <div>
+                        <div class="ai-messages" id="aiMessages">
+                            <div class="message assistant-message">
+                                Bonjour ! Je suis ton assistant IA. Comment puis-je t'aider aujourd'hui ? 🤖
+                            </div>
+                        </div>
                         <div class="ai-input">
-                            <input type="text" id="aiInput" placeholder="Pose une question à ton assistant...">
+                            <input type="text" id="aiInput" placeholder="Pose ta question...">
                             <button onclick="sendMessage()">
-                                <i class="fas fa-paper-plane"></i>
+                                <i class="fas fa-paper-plane"></i> Envoyer
                             </button>
                         </div>
                     </div>
@@ -150,13 +167,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Mon Assistant Personnel. Développé avec ❤️ pour les étudiants.</p>
-    </footer>
-
     <script src="app.js"></script>
-    <script src="charts.js"></script>
-    <script src="chart.js"></script>
 </body>
 </html>
