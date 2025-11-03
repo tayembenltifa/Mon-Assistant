@@ -1,6 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Ajouter cette section AVANT le contenu principal -->
+<div id="loginSection" style="display: none;">
+    <div class="login-container">
+        <h2>👤 Mon Assistant Personnel</h2>
+        <p>Choisis ton profil pour accéder à tes tâches</p>
+        <input type="text" id="usernameInput" placeholder="Entre ton prénom" maxlength="20">
+        <button onclick="handleLogin()">Commencer</button>
+        
+        <div id="existingUsers" style="margin-top: 20px;">
+            <p>Profils existants :</p>
+            <!-- Les profils seront ajoutés ici dynamiquement -->
+        </div>
+    </div>
+</div>
+
+<!-- Modifier votre contenu principal -->
+<div id="mainApp" style="display: none;">
+    <!-- Votre header actuel -->
+    <header>
+        <h1>Mon Assistant</h1>
+        <div class="user-info">
+            <span>Bonjour, <span id="currentUserName"></span>!</span>
+            <button onclick="logout()" class="logout-btn">Changer</button>
+        </div>
+    </header>
+    
+    <!-- Le reste de votre contenu -->
+</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Assistant Personnel - Application de Productivité Gratuite</title>
