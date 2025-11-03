@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendrier - Mon Assistant</title>
+    <title>Calendrier Interactif - Mon Assistant Personnel</title>
+    <meta name="description" content="Calendrier interactif complet pour planifier vos événements, rendez-vous et activités. Synchronisation avec vos tâches et objectifs.">
+    <meta name="keywords" content="calendrier, planning, événements, rendez-vous, organisation, agenda">
+    <meta name="author" content="Mon Assistant Personnel">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Styles spécifiques au calendrier */
         .calendar-controls {
             display: flex;
             justify-content: space-between;
@@ -79,6 +81,7 @@
             border-radius: var(--radius);
             padding: 1rem;
             box-shadow: var(--shadow);
+            margin-bottom: 2rem;
         }
 
         .calendar-header {
@@ -106,6 +109,7 @@
             transition: var(--transition);
             background: white;
             position: relative;
+            min-height: 80px;
         }
 
         .calendar-day:hover {
@@ -125,33 +129,41 @@
             font-weight: 600;
         }
 
+        .calendar-day.has-events {
+            border: 2px solid var(--secondary);
+        }
+
         .day-number {
             font-size: 0.9rem;
             font-weight: 500;
+            margin-bottom: 0.25rem;
         }
 
         .day-events {
-            position: absolute;
-            bottom: 2px;
-            left: 2px;
-            right: 2px;
             display: flex;
+            flex-direction: column;
             gap: 2px;
-            flex-wrap: wrap;
+            max-height: 60px;
+            overflow-y: auto;
         }
 
-        .event-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
+        .event-indicator {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
             background: var(--secondary);
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .event-dot.work { background: var(--primary); }
-        .event-dot.personal { background: var(--secondary); }
-        .event-dot.important { background: var(--danger); }
+        .event-indicator.work { background: var(--primary); }
+        .event-indicator.personal { background: var(--secondary); }
+        .event-indicator.important { background: var(--danger); }
+        .event-indicator.health { background: var(--success); }
 
-        /* Modal pour ajouter des événements */
+        /* Modal pour les événements */
         .modal {
             display: none;
             position: fixed;
@@ -175,11 +187,13 @@
             box-shadow: var(--shadow-lg);
             width: 90%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
@@ -195,6 +209,7 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray);
+            padding: 0.5rem;
         }
 
         .close-btn:hover {
@@ -263,6 +278,15 @@
             background: var(--gray);
         }
 
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
         /* Liste des événements */
         .events-sidebar {
             background: rgba(255, 255, 255, 0.95);
@@ -282,11 +306,18 @@
             background: var(--light);
             border-radius: var(--radius);
             border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .event-item:hover {
+            transform: translateX(5px);
         }
 
         .event-item.work { border-left-color: var(--primary); }
         .event-item.personal { border-left-color: var(--secondary); }
         .event-item.important { border-left-color: var(--danger); }
+        .event-item.health { border-left-color: var(--success); }
 
         .event-time {
             font-size: 0.8rem;
@@ -316,12 +347,23 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-top: 1rem;
         }
 
         .add-event-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
         @media (max-width: 768px) {
@@ -342,6 +384,16 @@
                 font-size: 0.8rem;
             }
             
+            .calendar-day {
+                min-height: 60px;
+                padding: 0.25rem;
+            }
+            
+            .event-indicator {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.2rem;
+            }
+            
             .modal-content {
                 width: 95%;
                 padding: 1rem;
@@ -350,141 +402,157 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Navigation principale">
         <div class="nav-brand">
-            <i class="fas fa-robot"></i>
-            <span>Mon Assistant</span>
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            <span>Mon Assistant Personnel</span>
         </div>
         <div class="nav-links">
             <a href="index.html" class="nav-link">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home" aria-hidden="true"></i> Dashboard
             </a>
             <a href="tasks.html" class="nav-link">
-                <i class="fas fa-tasks"></i> Tâches
+                <i class="fas fa-tasks" aria-hidden="true"></i> Tâches
             </a>
             <a href="notes.html" class="nav-link">
-                <i class="fas fa-sticky-note"></i> Notes
+                <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
             </a>
-            <a href="calendar.html" class="nav-link active">
-                <i class="fas fa-calendar"></i> Calendrier
+            <a href="calendar.html" class="nav-link active" aria-current="page">
+                <i class="fas fa-calendar" aria-hidden="true"></i> Calendrier
             </a>
             <a href="goals.html" class="nav-link">
-                <i class="fas fa-bullseye"></i> Objectifs
+                <i class="fas fa-bullseye" aria-hidden="true"></i> Objectifs
             </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle">
-                <i class="fas fa-moon"></i>
+            <button id="themeToggle" aria-label="Changer le thème">
+                <i class="fas fa-moon" aria-hidden="true"></i>
             </button>
         </div>
     </nav>
 
-    <main class="dashboard-main">
-        <div class="dashboard-header">
-            <h1><i class="fas fa-calendar"></i> Calendrier</h1>
-            <p>Organise ton temps et planifie tes activités</p>
-        </div>
+    <main class="dashboard-main" role="main">
+        <header class="dashboard-header">
+            <h1><i class="fas fa-calendar" aria-hidden="true"></i> Calendrier Interactif</h1>
+            <p>Planifiez vos événements et organisez votre temps</p>
+        </header>
 
         <!-- Contrôles du calendrier -->
         <div class="calendar-controls">
             <div class="calendar-nav">
-                <button class="nav-btn" id="prevMonth">
-                    <i class="fas fa-chevron-left"></i>
+                <button class="nav-btn" id="prevMonth" aria-label="Mois précédent">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
                 </button>
-                <div class="current-month" id="currentMonth">Mois Actuel</div>
-                <button class="nav-btn" id="nextMonth">
-                    <i class="fas fa-chevron-right"></i>
+                <div class="current-month" id="currentMonth" aria-live="polite">Chargement...</div>
+                <button class="nav-btn" id="nextMonth" aria-label="Mois suivant">
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
                 </button>
             </div>
             
             <div class="view-controls">
-                <button class="view-btn active" data-view="month">Mois</button>
-                <button class="view-btn" data-view="week">Semaine</button>
+                <button class="view-btn active" data-view="month" aria-pressed="true">Mois</button>
+                <button class="view-btn" data-view="week" aria-pressed="false">Semaine</button>
             </div>
             
-            <button class="add-event-btn" id="addEventBtn">
-                <i class="fas fa-plus"></i> Nouvel Événement
+            <button class="add-event-btn" id="addEventBtn" aria-label="Ajouter un nouvel événement">
+                <i class="fas fa-plus" aria-hidden="true"></i> Nouvel Événement
             </button>
         </div>
 
         <div class="dashboard-grid">
-            <!-- Calendrier -->
-            <div class="dashboard-widget">
+            <!-- Calendrier Principal -->
+            <section class="dashboard-widget full-width" aria-labelledby="calendar-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-calendar-alt"></i> Calendrier du Mois</h2>
+                    <h2 id="calendar-title"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Calendrier du Mois</h2>
+                    <span id="calendarSummary" aria-live="polite">Aucun événement</span>
                 </div>
                 <div class="widget-content">
                     <div class="calendar-grid">
-                        <div class="calendar-header">
-                            <div>Lun</div>
-                            <div>Mar</div>
-                            <div>Mer</div>
-                            <div>Jeu</div>
-                            <div>Ven</div>
-                            <div>Sam</div>
-                            <div>Dim</div>
+                        <div class="calendar-header" role="row">
+                            <div role="columnheader">Lun</div>
+                            <div role="columnheader">Mar</div>
+                            <div role="columnheader">Mer</div>
+                            <div role="columnheader">Jeu</div>
+                            <div role="columnheader">Ven</div>
+                            <div role="columnheader">Sam</div>
+                            <div role="columnheader">Dim</div>
                         </div>
-                        <div class="calendar-body" id="calendarBody">
+                        <div class="calendar-body" id="calendarBody" role="grid">
                             <!-- Les jours seront générés ici par JavaScript -->
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Événements du mois -->
-            <div class="dashboard-widget">
+            <!-- Événements du Mois -->
+            <section class="dashboard-widget" aria-labelledby="events-title">
                 <div class="widget-header">
-                    <h2><i class="fas fa-list"></i> Événements du Mois</h2>
+                    <h2 id="events-title"><i class="fas fa-list" aria-hidden="true"></i> Événements du Mois</h2>
+                    <span id="eventsCount">0 événements</span>
                 </div>
                 <div class="widget-content">
-                    <div class="events-list" id="monthEvents">
+                    <div class="events-list" id="monthEvents" role="list">
                         <!-- Les événements seront affichés ici -->
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Événements à Venir -->
+            <section class="dashboard-widget" aria-labelledby="upcoming-title">
+                <div class="widget-header">
+                    <h2 id="upcoming-title"><i class="fas fa-clock" aria-hidden="true"></i> À Venir</h2>
+                </div>
+                <div class="widget-content">
+                    <div class="events-list" id="upcomingEvents" role="list">
+                        <!-- Les événements à venir seront affichés ici -->
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <!-- Modal pour ajouter un événement -->
-    <div class="modal" id="eventModal">
+    <!-- Modal pour ajouter/modifier un événement -->
+    <div class="modal" id="eventModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalTitle">Nouvel Événement</h3>
-                <button class="close-btn" id="closeModal">&times;</button>
+                <button class="close-btn" id="closeModal" aria-label="Fermer la fenêtre">&times;</button>
             </div>
-            <form id="eventForm">
+            <form id="eventForm" role="form">
                 <div class="form-group">
-                    <label for="eventTitle">Titre de l'événement</label>
-                    <input type="text" id="eventTitle" required>
+                    <label for="eventTitle">Titre de l'événement *</label>
+                    <input type="text" id="eventTitle" required aria-required="true" placeholder="Nom de l'événement">
                 </div>
                 
                 <div class="form-group">
-                    <label for="eventDate">Date</label>
-                    <input type="date" id="eventDate" required>
+                    <label for="eventDate">Date *</label>
+                    <input type="date" id="eventDate" required aria-required="true">
                 </div>
                 
                 <div class="form-group">
                     <label for="eventTime">Heure</label>
-                    <input type="time" id="eventTime">
+                    <input type="time" id="eventTime" aria-label="Heure de l'événement">
                 </div>
                 
                 <div class="form-group">
                     <label for="eventCategory">Catégorie</label>
-                    <select id="eventCategory">
-                        <option value="personal">Personnel</option>
-                        <option value="work">Travail</option>
-                        <option value="important">Important</option>
+                    <select id="eventCategory" aria-label="Catégorie de l'événement">
+                        <option value="personal">👤 Personnel</option>
+                        <option value="work">💼 Travail</option>
+                        <option value="important">🔴 Important</option>
+                        <option value="health">🏃 Santé</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="eventDescription">Description (optionnel)</label>
-                    <textarea id="eventDescription" rows="3"></textarea>
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription" rows="3" placeholder="Description optionnelle..." aria-label="Description de l'événement"></textarea>
                 </div>
                 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancelEvent">Annuler</button>
                     <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    <button type="button" class="btn btn-danger" id="deleteEvent" style="display: none;">Supprimer</button>
                 </div>
             </form>
         </div>
@@ -497,6 +565,7 @@
                 this.currentDate = new Date();
                 this.events = JSON.parse(localStorage.getItem('calendarEvents')) || [];
                 this.selectedDate = null;
+                this.editingEvent = null;
                 
                 this.init();
             }
@@ -505,6 +574,7 @@
                 this.setupEventListeners();
                 this.renderCalendar();
                 this.renderMonthEvents();
+                this.renderUpcomingEvents();
             }
 
             setupEventListeners() {
@@ -513,12 +583,14 @@
                     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
                     this.renderCalendar();
                     this.renderMonthEvents();
+                    this.renderUpcomingEvents();
                 });
 
                 document.getElementById('nextMonth').addEventListener('click', () => {
                     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
                     this.renderCalendar();
                     this.renderMonthEvents();
+                    this.renderUpcomingEvents();
                 });
 
                 // Bouton ajouter événement
@@ -540,12 +612,32 @@
                     this.saveEvent();
                 });
 
+                document.getElementById('deleteEvent').addEventListener('click', () => {
+                    this.deleteEvent();
+                });
+
                 // Fermer modal en cliquant à l'extérieur
                 document.getElementById('eventModal').addEventListener('click', (e) => {
                     if (e.target.id === 'eventModal') {
                         this.closeEventModal();
                     }
                 });
+
+                // Aujourd'hui - raccourci clavier
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 't' && (e.ctrlKey || e.metaKey)) {
+                        e.preventDefault();
+                        this.goToToday();
+                    }
+                });
+            }
+
+            goToToday() {
+                this.currentDate = new Date();
+                this.renderCalendar();
+                this.renderMonthEvents();
+                this.renderUpcomingEvents();
+                this.showNotification('Retour à aujourd\'hui', 'success');
             }
 
             renderCalendar() {
@@ -562,9 +654,9 @@
                 const firstDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
                 const lastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
                 
-                // Obtenir le jour de la semaine du premier jour (0 = dimanche, 1 = lundi, etc.)
+                // Obtenir le jour de la semaine du premier jour
                 let firstDayOfWeek = firstDay.getDay();
-                firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1; // Ajuster pour commencer par lundi
+                firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
 
                 // Calculer le nombre de jours du mois précédent à afficher
                 const prevMonthLastDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 0).getDate();
@@ -591,11 +683,20 @@
                     const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, day);
                     this.createDayElement(date, true, calendarBody);
                 }
+
+                this.updateCalendarSummary();
             }
 
             createDayElement(date, isOtherMonth, container) {
                 const dayElement = document.createElement('div');
                 dayElement.className = 'calendar-day';
+                dayElement.setAttribute('role', 'gridcell');
+                dayElement.setAttribute('aria-label', date.toLocaleDateString('fr-FR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }));
                 
                 if (isOtherMonth) {
                     dayElement.classList.add('other-month');
@@ -605,6 +706,7 @@
                 const today = new Date();
                 if (date.toDateString() === today.toDateString()) {
                     dayElement.classList.add('today');
+                    dayElement.setAttribute('aria-current', 'date');
                 }
 
                 // Numéro du jour
@@ -613,16 +715,28 @@
                 dayNumber.textContent = date.getDate();
                 dayElement.appendChild(dayNumber);
 
-                // Points d'événements
+                // Événements du jour
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'day-events';
                 
                 const dayEvents = this.getEventsForDate(date);
-                dayEvents.slice(0, 3).forEach(event => {
-                    const eventDot = document.createElement('div');
-                    eventDot.className = `event-dot ${event.category}`;
-                    eventsContainer.appendChild(eventDot);
-                });
+                if (dayEvents.length > 0) {
+                    dayElement.classList.add('has-events');
+                    dayEvents.slice(0, 3).forEach(event => {
+                        const eventIndicator = document.createElement('div');
+                        eventIndicator.className = `event-indicator ${event.category}`;
+                        eventIndicator.textContent = event.title;
+                        eventIndicator.setAttribute('aria-label', `${event.title} - ${this.getCategoryLabel(event.category)}`);
+                        eventsContainer.appendChild(eventIndicator);
+                    });
+                    
+                    if (dayEvents.length > 3) {
+                        const moreEvents = document.createElement('div');
+                        moreEvents.className = 'event-indicator';
+                        moreEvents.textContent = `+${dayEvents.length - 3} more`;
+                        eventsContainer.appendChild(moreEvents);
+                    }
+                }
                 
                 dayElement.appendChild(eventsContainer);
 
@@ -640,26 +754,52 @@
                 this.openEventModal();
             }
 
-            openEventModal() {
-                document.getElementById('eventModal').style.display = 'block';
+            openEventModal(event = null) {
+                this.editingEvent = event;
+                const modal = document.getElementById('eventModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const deleteBtn = document.getElementById('deleteEvent');
                 
-                // Si une date est sélectionnée, la pré-remplir
-                if (this.selectedDate) {
-                    document.getElementById('eventDate').value = this.formatDateForInput(this.selectedDate);
+                if (event) {
+                    modalTitle.textContent = 'Modifier l\'Événement';
+                    deleteBtn.style.display = 'block';
+                    this.fillEventForm(event);
                 } else {
-                    document.getElementById('eventDate').value = this.formatDateForInput(new Date());
+                    modalTitle.textContent = 'Nouvel Événement';
+                    deleteBtn.style.display = 'none';
+                    this.clearEventForm();
                 }
                 
-                // Réinitialiser le formulaire
-                document.getElementById('eventTitle').value = '';
-                document.getElementById('eventTime').value = '12:00';
-                document.getElementById('eventCategory').value = 'personal';
-                document.getElementById('eventDescription').value = '';
+                modal.style.display = 'block';
+                modal.setAttribute('aria-hidden', 'false');
+                
+                // Focus sur le titre
+                document.getElementById('eventTitle').focus();
             }
 
             closeEventModal() {
-                document.getElementById('eventModal').style.display = 'none';
+                const modal = document.getElementById('eventModal');
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
                 this.selectedDate = null;
+                this.editingEvent = null;
+            }
+
+            fillEventForm(event) {
+                document.getElementById('eventTitle').value = event.title;
+                document.getElementById('eventDate').value = event.date;
+                document.getElementById('eventTime').value = event.time || '';
+                document.getElementById('eventCategory').value = event.category;
+                document.getElementById('eventDescription').value = event.description || '';
+            }
+
+            clearEventForm() {
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('eventDate').value = this.selectedDate ? 
+                    this.formatDateForInput(this.selectedDate) : this.formatDateForInput(new Date());
+                document.getElementById('eventTime').value = '12:00';
+                document.getElementById('eventCategory').value = 'personal';
+                document.getElementById('eventDescription').value = '';
             }
 
             saveEvent() {
@@ -670,27 +810,56 @@
                 const description = document.getElementById('eventDescription').value.trim();
 
                 if (!title) {
-                    alert('Veuillez entrer un titre pour l\'événement');
+                    this.showNotification('Veuillez entrer un titre pour l\'événement', 'error');
                     return;
                 }
 
-                const event = {
-                    id: Date.now(),
+                if (!date) {
+                    this.showNotification('Veuillez sélectionner une date', 'error');
+                    return;
+                }
+
+                const eventData = {
                     title: title,
                     date: date,
                     time: time,
                     category: category,
                     description: description,
-                    createdAt: new Date().toISOString()
+                    updatedAt: new Date().toISOString()
                 };
 
-                this.events.push(event);
+                if (this.editingEvent) {
+                    // Mettre à jour l'événement existant
+                    Object.assign(this.editingEvent, eventData);
+                    this.showNotification('Événement mis à jour !', 'success');
+                } else {
+                    // Créer un nouvel événement
+                    const newEvent = {
+                        id: Date.now(),
+                        createdAt: new Date().toISOString(),
+                        ...eventData
+                    };
+                    this.events.push(newEvent);
+                    this.showNotification('Événement ajouté avec succès !', 'success');
+                }
+
                 this.saveEvents();
                 this.renderCalendar();
                 this.renderMonthEvents();
+                this.renderUpcomingEvents();
                 this.closeEventModal();
+            }
 
-                alert('Événement ajouté avec succès !');
+            deleteEvent() {
+                if (this.editingEvent && confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
+                    this.events = this.events.filter(event => event.id !== this.editingEvent.id);
+                    this.saveEvents();
+                    this.renderCalendar();
+                    this.renderMonthEvents();
+                    this.renderUpcomingEvents();
+                    this.closeEventModal();
+                    this.showNotification('Événement supprimé', 'info');
+                }
             }
 
             getEventsForDate(date) {
@@ -698,23 +867,47 @@
                 return this.events.filter(event => event.date === dateString);
             }
 
-            renderMonthEvents() {
-                const monthEventsContainer = document.getElementById('monthEvents');
+            getEventsForMonth() {
                 const currentMonth = this.currentDate.getMonth();
                 const currentYear = this.currentDate.getFullYear();
-
-                const monthEvents = this.events.filter(event => {
+                
+                return this.events.filter(event => {
                     const eventDate = new Date(event.date);
-                    return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+                    return eventDate.getMonth() === currentMonth && 
+                           eventDate.getFullYear() === currentYear;
                 }).sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
+
+            getUpcomingEvents() {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                return this.events
+                    .filter(event => new Date(event.date) >= today)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 5);
+            }
+
+            renderMonthEvents() {
+                const container = document.getElementById('monthEvents');
+                const monthEvents = this.getEventsForMonth();
+
+                document.getElementById('eventsCount').textContent = 
+                    `${monthEvents.length} événement${monthEvents.length !== 1 ? 's' : ''}`;
 
                 if (monthEvents.length === 0) {
-                    monthEventsContainer.innerHTML = '<div class="event-item">Aucun événement ce mois-ci</div>';
+                    container.innerHTML = `
+                        <div class="empty-state" role="status">
+                            <i class="fas fa-calendar-times" aria-hidden="true"></i>
+                            <h3>Aucun événement ce mois-ci</h3>
+                            <p>Ajoutez votre premier événement !</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                monthEventsContainer.innerHTML = monthEvents.map(event => `
-                    <div class="event-item ${event.category}">
+                container.innerHTML = monthEvents.map(event => `
+                    <div class="event-item ${event.category}" onclick="calendarManager.openEventModal(${JSON.stringify(event).replace(/"/g, '&quot;')})" role="listitem">
                         <div class="event-time">
                             ${new Date(event.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' })} 
                             ${event.time ? 'à ' + event.time : ''}
@@ -728,17 +921,91 @@
                 `).join('');
             }
 
+            renderUpcomingEvents() {
+                const container = document.getElementById('upcomingEvents');
+                const upcomingEvents = this.getUpcomingEvents();
+
+                if (upcomingEvents.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" role="status">
+                            <i class="fas fa-clock" aria-hidden="true"></i>
+                            <h3>Aucun événement à venir</h3>
+                            <p>Planifiez vos prochains événements</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = upcomingEvents.map(event => `
+                    <div class="event-item ${event.category}" onclick="calendarManager.openEventModal(${JSON.stringify(event).replace(/"/g, '&quot;')})" role="listitem">
+                        <div class="event-time">
+                            ${new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} 
+                            ${event.time ? 'à ' + event.time : ''}
+                        </div>
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-category">
+                            ${this.getCategoryLabel(event.category)}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateCalendarSummary() {
+                const monthEvents = this.getEventsForMonth();
+                const todayEvents = this.getEventsForDate(new Date());
+                
+                let summary = '';
+                if (todayEvents.length > 0) {
+                    summary = `${todayEvents.length} événement${todayEvents.length !== 1 ? 's' : ''} aujourd'hui`;
+                } else if (monthEvents.length > 0) {
+                    summary = `${monthEvents.length} événement${monthEvents.length !== 1 ? 's' : ''} ce mois`;
+                } else {
+                    summary = 'Aucun événement planifié';
+                }
+                
+                document.getElementById('calendarSummary').textContent = summary;
+            }
+
             getCategoryLabel(category) {
                 const labels = {
-                    personal: 'Personnel',
-                    work: 'Travail',
-                    important: 'Important'
+                    personal: '👤 Personnel',
+                    work: '💼 Travail',
+                    important: '🔴 Important',
+                    health: '🏃 Santé'
                 };
                 return labels[category] || 'Autre';
             }
 
             formatDateForInput(date) {
                 return date.toISOString().split('T')[0];
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                notification.setAttribute('role', 'alert');
+                notification.setAttribute('aria-live', 'polite');
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                `;
+
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
             }
 
             saveEvents() {
@@ -748,6 +1015,33 @@
 
         // Initialisation du calendrier
         const calendarManager = new CalendarManager();
+
+        // Styles d'animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
