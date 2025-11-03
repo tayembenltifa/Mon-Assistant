@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Tâches 📝 - Mon Assistant</title>
+    <title>Tâches - Mon Assistant</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <nav class="navbar">
@@ -15,172 +14,207 @@
             <span>Mon Assistant</span>
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="tasks.html" class="nav-link active"><i class="fas fa-tasks"></i> Tâches</a>
-            <a href="notes.html" class="nav-link"><i class="fas fa-sticky-note"></i> Notes</a>
-            <a href="calendar.html" class="nav-link"><i class="fas fa-calendar"></i> Calendrier</a>
-            <a href="goals.html" class="nav-link"><i class="fas fa-bullseye"></i> Objectifs</a>
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profil</a>
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="tasks.html" class="nav-link active">
+                <i class="fas fa-tasks"></i> Tâches
+            </a>
+            <a href="notes.html" class="nav-link">
+                <i class="fas fa-sticky-note"></i> Notes
+            </a>
+            <a href="calendar.html" class="nav-link">
+                <i class="fas fa-calendar"></i> Calendrier
+            </a>
+            <a href="goals.html" class="nav-link">
+                <i class="fas fa-bullseye"></i> Objectifs
+            </a>
         </div>
         <div class="nav-theme">
-            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+            <button id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
 
-    <main class="tasks-main">
-        <div class="page-header">
-            <h1><i class="fas fa-tasks"></i> Gestion des Tâches</h1>
-            <p>Organise et priorise tes tâches efficacement</p>
+    <main class="dashboard-main">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-tasks"></i> Mes Tâches</h1>
+            <p>Organise et priorise tes tâches</p>
         </div>
 
-        <div class="tasks-container">
-            <!-- Formulaire d'ajout de tâche -->
-            <div class="task-form-card">
-                <h3><i class="fas fa-plus"></i> Nouvelle Tâche</h3>
-                <form id="taskForm">
-                    <div class="form-group">
-                        <label for="taskTitle">Titre de la tâche</label>
-                        <input type="text" id="taskTitle" required placeholder="Que dois-tu faire ?">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="taskDescription">Description</label>
-                        <textarea id="taskDescription" placeholder="Détails de la tâche..."></textarea>
-                    </div>
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="tasksTotal">0</h3>
+                    <p>Total</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="tasksCompleted">0</h3>
+                    <p>Terminées</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="tasksPending">0</h3>
+                    <p>En attente</p>
+                </div>
+            </div>
+        </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="taskDueDate">Date d'échéance</label>
-                            <input type="date" id="taskDueDate">
+        <div class="dashboard-grid">
+            <!-- Formulaire -->
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-plus"></i> Nouvelle Tâche</h2>
+                </div>
+                <div class="widget-content">
+                    <form id="taskForm">
+                        <div style="margin-bottom: 1rem;">
+                            <input type="text" id="taskTitle" placeholder="Titre de la tâche" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius);">
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="taskPriority">Priorité</label>
-                            <select id="taskPriority">
-                                <option value="low">🟢 Basse</option>
-                                <option value="medium">🟡 Moyenne</option>
-                                <option value="high">🔴 Haute</option>
-                                <option value="urgent">⚡ Urgente</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="taskCategory">Catégorie</label>
-                        <select id="taskCategory">
-                            <option value="work">💼 Travail</option>
-                            <option value="study">📚 Études</option>
-                            <option value="personal">👤 Personnel</option>
-                            <option value="health">🏃 Santé</option>
-                            <option value="shopping">🛒 Courses</option>
-                            <option value="other">🔷 Autre</option>
-                        </select>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">
+                        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; width: 100%;">
                             <i class="fas fa-plus"></i> Ajouter la Tâche
                         </button>
-                        <button type="button" class="btn-secondary" onclick="clearForm()">
-                            <i class="fas fa-eraser"></i> Effacer
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Filtres et recherche -->
-            <div class="tasks-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="taskSearch" placeholder="Rechercher une tâche...">
-                </div>
-                
-                <div class="filters">
-                    <select id="statusFilter">
-                        <option value="all">Tous les statuts</option>
-                        <option value="pending">En attente</option>
-                        <option value="completed">Terminées</option>
-                    </select>
-                    
-                    <select id="priorityFilter">
-                        <option value="all">Toutes les priorités</option>
-                        <option value="urgent">Urgent</option>
-                        <option value="high">Haute</option>
-                        <option value="medium">Moyenne</option>
-                        <option value="low">Basse</option>
-                    </select>
-                    
-                    <select id="categoryFilter">
-                        <option value="all">Toutes les catégories</option>
-                        <option value="work">Travail</option>
-                        <option value="study">Études</option>
-                        <option value="personal">Personnel</option>
-                        <option value="health">Santé</option>
-                        <option value="shopping">Courses</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Statistiques des tâches -->
-            <div class="tasks-stats">
-                <div class="stat-item">
-                    <span class="stat-number" id="totalTasksCount">0</span>
-                    <span class="stat-label">Total</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="pendingTasksCount">0</span>
-                    <span class="stat-label">En attente</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="completedTasksCount">0</span>
-                    <span class="stat-label">Terminées</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="overdueTasksCount">0</span>
-                    <span class="stat-label">En retard</span>
+                    </form>
                 </div>
             </div>
 
             <!-- Liste des tâches -->
-            <div class="tasks-list" id="tasksList">
-                <!-- Les tâches seront chargées ici par JavaScript -->
-            </div>
-
-            <!-- Vue Kanban -->
-            <div class="kanban-view" id="kanbanView" style="display: none;">
-                <div class="kanban-column">
-                    <h4>📋 À Faire</h4>
-                    <div class="kanban-tasks" id="todoColumn"></div>
+            <div class="dashboard-widget">
+                <div class="widget-header">
+                    <h2><i class="fas fa-list"></i> Liste des Tâches</h2>
                 </div>
-                <div class="kanban-column">
-                    <h4>⚡ En Cours</h4>
-                    <div class="kanban-tasks" id="inProgressColumn"></div>
+                <div class="widget-content">
+                    <div id="tasksList" class="task-list">
+                        <!-- Les tâches seront ajoutées ici -->
+                    </div>
                 </div>
-                <div class="kanban-column">
-                    <h4>✅ Terminé</h4>
-                    <div class="kanban-tasks" id="doneColumn"></div>
-                </div>
-            </div>
-
-            <!-- Contrôles d'affichage -->
-            <div class="view-controls">
-                <button class="view-btn active" onclick="switchView('list')">
-                    <i class="fas fa-list"></i> Liste
-                </button>
-                <button class="view-btn" onclick="switchView('kanban')">
-                    <i class="fas fa-columns"></i> Kanban
-                </button>
-                <button class="view-btn" onclick="exportTasks()">
-                    <i class="fas fa-download"></i> Exporter
-                </button>
-                <button class="view-btn btn-danger" onclick="clearCompletedTasks()">
-                    <i class="fas fa-trash"></i> Supprimer terminées
-                </button>
             </div>
         </div>
     </main>
 
-    <script src="assets/js/app.js"></script>
-    <script src="assets/js/tasks.js"></script>
+    <script src="app.js"></script>
+    <script>
+        class TaskManager {
+            constructor() {
+                this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderTasks();
+                this.updateStats();
+            }
+
+            setupEventListeners() {
+                document.getElementById('taskForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addTask();
+                });
+            }
+
+            addTask() {
+                const input = document.getElementById('taskTitle');
+                const title = input.value.trim();
+
+                if (title) {
+                    const task = {
+                        id: Date.now(),
+                        title: title,
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    this.tasks.push(task);
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStats();
+                    input.value = '';
+                    
+                    // Mettre à jour le dashboard principal
+                    if (window.app) {
+                        window.app.updateDashboard();
+                    }
+                }
+            }
+
+            toggleTask(id) {
+                this.tasks = this.tasks.map(task => 
+                    task.id === id ? { ...task, completed: !task.completed } : task
+                );
+                this.saveTasks();
+                this.renderTasks();
+                this.updateStats();
+                
+                if (window.app) {
+                    window.app.updateDashboard();
+                }
+            }
+
+            deleteTask(id) {
+                if (confirm('Supprimer cette tâche ?')) {
+                    this.tasks = this.tasks.filter(task => task.id !== id);
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStats();
+                    
+                    if (window.app) {
+                        window.app.updateDashboard();
+                    }
+                }
+            }
+
+            renderTasks() {
+                const container = document.getElementById('tasksList');
+                
+                if (this.tasks.length === 0) {
+                    container.innerHTML = '<div class="task-item">Aucune tâche pour le moment</div>';
+                    return;
+                }
+
+                container.innerHTML = this.tasks.map(task => `
+                    <div class="task-item ${task.completed ? 'completed' : ''}">
+                        <div style="display: flex; align-items: center; gap: 1rem; width: 100%;">
+                            <div onclick="taskManager.toggleTask(${task.id})" style="cursor: pointer; padding: 0.5rem;">
+                                <i class="fas fa-${task.completed ? 'check-circle' : 'circle'}" style="color: ${task.completed ? 'var(--success)' : 'var(--gray)'}"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="task-title">${task.title}</div>
+                                <div class="task-meta">${new Date(task.createdAt).toLocaleDateString('fr-FR')}</div>
+                            </div>
+                            <button onclick="taskManager.deleteTask(${task.id})" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 0.5rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateStats() {
+                document.getElementById('tasksTotal').textContent = this.tasks.length;
+                document.getElementById('tasksCompleted').textContent = this.tasks.filter(t => t.completed).length;
+                document.getElementById('tasksPending').textContent = this.tasks.filter(t => !t.completed).length;
+            }
+
+            saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(this.tasks));
+            }
+        }
+
+        const taskManager = new TaskManager();
+    </script>
 </body>
 </html>
